@@ -11,6 +11,7 @@ int main() {
 
 	Sprite heroSprite;
 	heroSprite.setTexture(texture);
+	heroSprite.setTextureRect(IntRect(0, 192, 96, 96));
 	heroSprite.setPosition(50, 25);
 	while (window.isOpen()) {
 		Event event;
