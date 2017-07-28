@@ -1,12 +1,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <map.h>
+#include <view.h>
 
 using namespace sf;
 
 class Player {
+private: float x, y;
 public:
-	float x, y, width, height, accelX, accelY, speed;
+	float width, height, accelX, accelY, speed;
 	int dir;
 	String file;
 	Image image;
@@ -36,12 +38,37 @@ public:
 		y += accelY * time;
 
 		speed = 0;
+		interactionWithMap();
 		sprite.setPosition(x , y);
 	}
+
+	void interactionWithMap() {
+		for (int i = (int)(y / 32); i < (y + height) / 32; ++i) {
+			for (int j = (int)(x / 32); j < (x + width) / 32; ++j) {
+				if (tileMap[i][j] == '0') {
+					if (accelY > 0) y = i * 32 - height;
+					if (accelY < 0) y = i * 32 + 32;
+					if (accelX > 0) x = j * 32 - width;
+					if (accelX < 0) x = j * 32 + 32;
+					return;
+				}
+				if (tileMap[i][j] == 's') {
+					x = 300; y = 300;
+					tileMap[i][j] = ' ';
+				}
+			}
+		}
+	}
+
+	float getPlayerCoordinateX() { return x; }
+	float getPlayerCoordinateY() { return y; }
+
 };
 
 int main() {
 	RenderWindow window(VideoMode(640, 480), "SMFL works!");
+	view.reset(FloatRect(0, 0, 640, 480));
+
 	Clock clock;
 	float currentFrame = 0;
 
@@ -52,7 +79,7 @@ int main() {
 	Sprite mapSprite;
 	mapSprite.setTexture(mapTexture);
 
-	Player p("hero.png", 250, 250, 96, 96);
+	Player p("hero.png", 32, 32, 96, 96);
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asMicroseconds();
@@ -87,8 +114,13 @@ int main() {
 			if (currentFrame > 3) currentFrame = 0;
 			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 0, 96, 96));
 		}
+
+		getPlayerCoordinateForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
 		p.update(time);
+
+		window.setView(view);
 		window.clear();
+
 		for (int i = 0; i < HEIGHT_MAP; ++i) {
 			for (int j = 0; j < WIDTH_MAP; ++j) {
 				if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
@@ -99,6 +131,7 @@ int main() {
 				window.draw(mapSprite);
 			}
 		}
+
 		window.draw(p.sprite);
 		window.display();
 	}
