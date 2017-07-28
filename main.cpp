@@ -4,6 +4,7 @@
 #include <view.h>
 
 using namespace sf;
+using namespace std;
 
 class Player {
 private: float x, y;
@@ -81,6 +82,12 @@ int main() {
 
 	Player p("hero.png", 250, 250, 96, 96);
 
+	Font font;
+	font.loadFromFile("../fonts/CyrilicOld.TTF");
+	Text text("", font, 20);
+	text.setColor(Color::Red);
+	text.setStyle(Text::Bold);
+
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
@@ -106,7 +113,7 @@ int main() {
 			p.dir = 3; p.speed = 0.1;
 			currentFrame += 0.005 * time;
 			if (currentFrame > 3) currentFrame = 0;
-			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 288, 96, 96));
+			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 307, 96, 96));
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			p.dir = 2; p.speed = 0.1;
@@ -131,7 +138,9 @@ int main() {
 				window.draw(mapSprite);
 			}
 		}
-
+		text.setString("Collected Stones: " + to_string(p.score));
+		text.setPosition(view.getCenter().x, view.getCenter().y);
+		window.draw(text);
 		window.draw(p.sprite);
 		window.display();
 	}

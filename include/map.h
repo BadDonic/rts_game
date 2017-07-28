@@ -8,7 +8,7 @@ sf::String tileMap[HEIGHT_MAP] =  {
 		"0          s                           0",
 		"0   s            s                     0",
 		"0                          s           0",
-		"0              s         s              0",
+		"0              s         s             0",
 		"0                                      0",
 		"0        s                 s           0",
 		"0                                      0",
