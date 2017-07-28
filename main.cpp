@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <map.h>
 
 using namespace sf;
 
@@ -41,11 +42,17 @@ public:
 
 int main() {
 	RenderWindow window(VideoMode(640, 480), "SMFL works!");
-
-	Player p("hero.png", 250, 250, 96, 96);
 	Clock clock;
 	float currentFrame = 0;
 
+	Image mapImage;
+	mapImage.loadFromFile("../images/map.png");
+	Texture mapTexture;
+	mapTexture.loadFromImage(mapImage);
+	Sprite mapSprite;
+	mapSprite.setTexture(mapTexture);
+
+	Player p("hero.png", 250, 250, 96, 96);
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asMicroseconds();
@@ -82,6 +89,16 @@ int main() {
 		}
 		p.update(time);
 		window.clear();
+		for (int i = 0; i < HEIGHT_MAP; ++i) {
+			for (int j = 0; j < WIDTH_MAP; ++j) {
+				if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
+				if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
+				if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
+
+				mapSprite.setPosition(j * 32, i * 32);
+				window.draw(mapSprite);
+			}
+		}
 		window.draw(p.sprite);
 		window.display();
 	}

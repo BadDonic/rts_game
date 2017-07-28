@@ -3,6 +3,8 @@ project(courseWork)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
-add_executable(courseWork ${SOURCE_FILES})
+include_directories(include)
+
+file(GLOB SOURCES "main.cpp" "src/*.cpp" "include/*.h")
+add_executable(courseWork ${SOURCES})
 target_link_libraries(courseWork "-lsfml-graphics -lsfml-window -lsfml-system")
