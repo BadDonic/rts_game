@@ -9,13 +9,13 @@ class Player {
 private: float x, y;
 public:
 	float width, height, accelX, accelY, speed;
-	int dir;
+	int dir, score;
 	String file;
 	Image image;
 	Texture texture;
 	Sprite sprite;
 	Player(String filePath, float x, float y, float width, float height) {
-		accelX = 0; accelY = 0; speed = 0; dir = 0;
+		accelX = 0; accelY = 0; speed = 0; dir = 0; score = 0;
 		file = filePath;
 		this->width = width;
 		this->height = height;
@@ -53,7 +53,7 @@ public:
 					return;
 				}
 				if (tileMap[i][j] == 's') {
-					x = 300; y = 300;
+					score++;
 					tileMap[i][j] = ' ';
 				}
 			}
@@ -66,8 +66,8 @@ public:
 };
 
 int main() {
-	RenderWindow window(VideoMode(640, 480), "SMFL works!");
-	view.reset(FloatRect(0, 0, 640, 480));
+	RenderWindow window(VideoMode(1024, 768), "SMFL works!");
+	view.reset(FloatRect(0, 0, 1024, 768));
 
 	Clock clock;
 	float currentFrame = 0;
@@ -79,7 +79,7 @@ int main() {
 	Sprite mapSprite;
 	mapSprite.setTexture(mapTexture);
 
-	Player p("hero.png", 32, 32, 96, 96);
+	Player p("hero.png", 250, 250, 96, 96);
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asMicroseconds();
@@ -115,7 +115,7 @@ int main() {
 			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 0, 96, 96));
 		}
 
-		getPlayerCoordinateForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
+		setPlayerCoordinatesForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
 		p.update(time);
 
 		window.setView(view);
