@@ -89,6 +89,9 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/map.h">
 			<Option target="courseWork"/>
 		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/mission.h">
+			<Option target="courseWork"/>
+		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/view.h">
 			<Option target="courseWork"/>
 		</Unit>

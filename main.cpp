@@ -101,6 +101,17 @@ int main() {
 	Text text("", font, 20);
 	text.setColor(Color::Black);
 
+	bool showMissionText = true;
+	Image questImage;
+	questImage.loadFromFile("../images/missionbg.jpg");
+	questImage.createMaskFromColor(Color(0, 0, 0));
+	Texture questTexture;
+	questTexture.loadFromImage(questImage);
+	Sprite questSprite;
+	questSprite.setTexture(questTexture);
+	questSprite.setTextureRect(IntRect(0, 0, 340, 510));
+	questSprite.setScale(0.6f, 0.6f);
+
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
@@ -108,7 +119,23 @@ int main() {
 
 
 		Event event;
-		while (window.pollEvent(event)) if (event.type == Event::Closed) window.close();
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed) window.close();
+			if (event.type == Event::KeyPressed)
+				if (event.key.code == Keyboard::Tab) {
+					switch (showMissionText){
+						case true: {
+							text.setString("Health : " + to_string(p.health) + "\n" + getTextMission(getCurrentMission((int)p.getPlayerCoordinateX())));
+							showMissionText = false;
+							break;
+						}
+						case false:
+							text.setString("");
+							showMissionText = true;
+							break;
+					}
+				}
+		}
 		if (p.life) {
 			gameTime = (int)(gameTimeClock.getElapsedTime().asSeconds());
 			if (Keyboard::isKeyPressed(Keyboard::Left)) {
@@ -161,9 +188,12 @@ int main() {
 				window.draw(mapSprite);
 			}
 		}
-		text.setString("Health = " + to_string(p.health) + "\nTime = " + to_string(gameTime));
-		text.setPosition(view.getCenter().x, view.getCenter().y);
-		window.draw(text);
+		if (!showMissionText) {
+			text.setPosition(view.getCenter().x + 125, view.getCenter().y - 130);
+			questSprite.setPosition(view.getCenter().x + 115, view.getCenter().y - 130);
+			window.draw(questSprite); window.draw(text);
+		}
+
 		window.draw(p.sprite);
 		window.display();
 	}
