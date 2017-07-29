@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <map.h>
 #include <view.h>
+#include <mission.h>
 
 using namespace sf;
 using namespace std;
@@ -10,13 +11,15 @@ class Player {
 private: float x, y;
 public:
 	float width, height, accelX, accelY, speed;
-	int dir, score;
+	int dir, score, health;
+	bool life;
 	String file;
 	Image image;
 	Texture texture;
 	Sprite sprite;
 	Player(String filePath, float x, float y, float width, float height) {
-		accelX = 0; accelY = 0; speed = 0; dir = 0; score = 0;
+		accelX = 0; accelY = 0; speed = 0; dir = 0; score = 0; health = 100;
+		life = true;
 		file = filePath;
 		this->width = width;
 		this->height = height;
@@ -41,6 +44,7 @@ public:
 		speed = 0;
 		interactionWithMap();
 		sprite.setPosition(x , y);
+		if (health <= 0) life = false;
 	}
 
 	void interactionWithMap() {
@@ -57,6 +61,14 @@ public:
 					score++;
 					tileMap[i][j] = ' ';
 				}
+				if (tileMap[i][j] == 'h') {
+					health += 20;
+					tileMap[i][j] = ' ';
+				}
+				if (tileMap[i][j] == 'f') {
+					health -= 40;
+					tileMap[i][j] = ' ';
+				}
 			}
 		}
 	}
@@ -71,6 +83,8 @@ int main() {
 	view.reset(FloatRect(0, 0, 1024, 768));
 
 	Clock clock;
+	Clock gameTimeClock;
+	int gameTime = 0;
 	float currentFrame = 0;
 
 	Image mapImage;
@@ -85,8 +99,7 @@ int main() {
 	Font font;
 	font.loadFromFile("../fonts/CyrilicOld.TTF");
 	Text text("", font, 20);
-	text.setColor(Color::Red);
-	text.setStyle(Text::Bold);
+	text.setColor(Color::Black);
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asMicroseconds();
@@ -96,33 +109,41 @@ int main() {
 
 		Event event;
 		while (window.pollEvent(event)) if (event.type == Event::Closed) window.close();
+		if (p.life) {
+			gameTime = (int)(gameTimeClock.getElapsedTime().asSeconds());
+			if (Keyboard::isKeyPressed(Keyboard::Left)) {
+				p.dir = 1;
+				p.speed = 0.1;
+				currentFrame += 0.005 * time;
+				if (currentFrame > 3) currentFrame = 0;
+				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 96, 96, 96));
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Right)) {
+				p.dir = 0;
+				p.speed = 0.1;
+				currentFrame += 0.005 * time;
+				if (currentFrame > 3) currentFrame = 0;
+				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 192, 96, 96));
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Up)) {
+				p.dir = 3;
+				p.speed = 0.1;
+				currentFrame += 0.005 * time;
+				if (currentFrame > 3) currentFrame = 0;
+				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 307, 96, 96));
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Down)) {
+				p.dir = 2;
+				p.speed = 0.1;
+				currentFrame += 0.005 * time;
+				if (currentFrame > 3) currentFrame = 0;
+				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 0, 96, 96));
+			}
+			setPlayerCoordinatesForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
+		}else {
+			view.move(0.1, 0);
+		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			p.dir = 1; p.speed = 0.1;
-			currentFrame += 0.005 * time;
-			if (currentFrame > 3) currentFrame = 0;
-			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 96, 96, 96));
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			p.dir = 0; p.speed = 0.1;
-			currentFrame += 0.005 * time;
-			if (currentFrame > 3) currentFrame = 0;
-			p.sprite.setTextureRect(IntRect(96 * int(currentFrame),192, 96, 96));
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			p.dir = 3; p.speed = 0.1;
-			currentFrame += 0.005 * time;
-			if (currentFrame > 3) currentFrame = 0;
-			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 307, 96, 96));
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			p.dir = 2; p.speed = 0.1;
-			currentFrame += 0.005 * time;
-			if (currentFrame > 3) currentFrame = 0;
-			p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 0, 96, 96));
-		}
-
-		setPlayerCoordinatesForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
 		p.update(time);
 
 		window.setView(view);
@@ -133,12 +154,14 @@ int main() {
 				if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
 				if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
 				if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
+				if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
+				if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
 
 				mapSprite.setPosition(j * 32, i * 32);
 				window.draw(mapSprite);
 			}
 		}
-		text.setString("Collected Stones: " + to_string(p.score));
+		text.setString("Health = " + to_string(p.health) + "\nTime = " + to_string(gameTime));
 		text.setPosition(view.getCenter().x, view.getCenter().y);
 		window.draw(text);
 		window.draw(p.sprite);
