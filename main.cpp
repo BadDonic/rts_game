@@ -75,13 +75,14 @@ public:
 
 	float getPlayerCoordinateX() { return x; }
 	float getPlayerCoordinateY() { return y; }
+	void setPlayerCoordinateX(float x) { this->x = x; }
+	void setPlayerCoordinateY(float y) { this->y = y; }
 
 };
 
 int main() {
-	RenderWindow window(VideoMode(1024, 768), "SMFL works!");
+	RenderWindow window(VideoMode(1366, 768), "SMFL works!", Style::Fullscreen);
 	view.reset(FloatRect(0, 0, 1024, 768));
-
 	Clock clock;
 	Clock gameTimeClock;
 	int gameTime = 0;
@@ -112,15 +113,41 @@ int main() {
 	questSprite.setTextureRect(IntRect(0, 0, 340, 510));
 	questSprite.setScale(0.6f, 0.6f);
 
+	int randomGenerateTimer = 3000;
+
+
+	bool isMove = false;
+	float dX = 0;
+	float dY = 0;
 	while (window.isOpen()) {
+
+
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
 		time /= 500;
+
+		Vector2i pixelPos = Mouse::getPosition(window);
+		Vector2f pos = window.mapPixelToCoords(pixelPos);
 
 
 		Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
+			if (event.type == Event::MouseButtonPressed)
+				if (event.key.code == Mouse::Left) {
+					if (p.sprite.getGlobalBounds().contains(pos.x, pos.y)){
+						dX = pos.x - p.sprite.getPosition().x;
+						dY = pos.y - p.sprite.getPosition().y;
+						isMove = true;
+					}
+				}
+
+			if (event.type == Event::MouseButtonReleased)
+				if (event.key.code == Mouse::Left) {
+					isMove = false;
+					p.sprite.setColor(Color::White);
+				}
+
 			if (event.type == Event::KeyPressed)
 				if (event.key.code == Keyboard::Tab) {
 					switch (showMissionText){
@@ -136,8 +163,21 @@ int main() {
 					}
 				}
 		}
+
+		randomGenerateTimer += time;
+		if (randomGenerateTimer > 3000) {
+			randomMapGenerate();
+			randomGenerateTimer = 0;
+		}
+
+		if (isMove) {
+			p.sprite.setColor(Color::Green);
+			p.setPlayerCoordinateX(pos.x - dX);
+			p.setPlayerCoordinateY(pos.y - dY);
+
+		}
+
 		if (p.life) {
-			gameTime = (int)(gameTimeClock.getElapsedTime().asSeconds());
 			if (Keyboard::isKeyPressed(Keyboard::Left)) {
 				p.dir = 1;
 				p.speed = 0.1;
@@ -166,26 +206,49 @@ int main() {
 				if (currentFrame > 3) currentFrame = 0;
 				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 0, 96, 96));
 			}
-			setPlayerCoordinatesForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
+			//setPlayerCoordinatesForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
 		}else {
 			view.move(0.1, 0);
 		}
+
+		Vector2i localPosition = Mouse::getPosition(window);
+		if (localPosition.x < 3) view.move(-0.2 * time, 0);
+		if (localPosition.x > window.getSize().x - 73) view.move(0.2 * time, 0);
+		if (localPosition.y > window.getSize().y - 58) view.move(0, 0.2 * time);
+		if (localPosition.y < 3) view.move(0, -0.2 * time);
+
 
 		p.update(time);
 
 		window.setView(view);
 		window.clear();
 
-		for (int i = 0; i < HEIGHT_MAP; ++i) {
-			for (int j = 0; j < WIDTH_MAP; ++j) {
-				if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
-				if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
-				if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
-				if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
-				if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
+		if (getCurrentMission(p.getPlayerCoordinateX()) == 0) {
+			for (int i = 0; i < HEIGHT_MAP; ++i) {
+				for (int j = 0; j < WIDTH_MAP; ++j) {
+					if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
+					if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
+					if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
+					if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
+					if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
 
-				mapSprite.setPosition(j * 32, i * 32);
-				window.draw(mapSprite);
+					mapSprite.setPosition(j * 32, i * 32);
+					window.draw(mapSprite);
+				}
+			}
+		}
+		if (getCurrentMission(p.getPlayerCoordinateX()) == 1) {
+			for (int i = 0; i < HEIGHT_MAP; ++i) {
+				for (int j = 0; j < WIDTH_MAP; ++j) {
+					if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
+					if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
+					if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
+					if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
+					if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
+
+					mapSprite.setPosition(j * 32, i * 32);
+					window.draw(mapSprite);
+				}
 			}
 		}
 		if (!showMissionText) {
