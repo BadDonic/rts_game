@@ -31,8 +31,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="159" column="31" lean-forward="true" selection-start-line="159" selection-start-column="31" selection-end-line="159" selection-end-column="31" />
+            <state relative-caret-position="761">
+              <caret line="257" column="43" lean-forward="true" selection-start-line="257" selection-start-column="43" selection-end-line="257" selection-end-column="43" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -198,7 +198,7 @@
       <workItem from="1501409161808" duration="6796000" />
       <workItem from="1501489206783" duration="78000" />
       <workItem from="1501522082708" duration="1560000" />
-      <workItem from="1501576648786" duration="4933000" />
+      <workItem from="1501576648786" duration="7236000" />
     </task>
     <task id="LOCAL-00001" summary="Draw Circle">
       <created>1500563835962</created>
@@ -298,11 +298,18 @@
       <option name="project" value="LOCAL" />
       <updated>1501582374584</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="create rotate hero after right click">
+      <created>1501583756893</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1501583756893</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62072000" />
+    <option name="totallyTimeSpent" value="64375000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1303" height="780" extended-state="6" />
@@ -350,7 +357,8 @@
     <MESSAGE value="drag and drop" />
     <MESSAGE value="move hero after right click" />
     <MESSAGE value="download hero for rotate" />
-    <option name="LAST_COMMIT_MESSAGE" value="download hero for rotate" />
+    <MESSAGE value="create rotate hero after right click" />
+    <option name="LAST_COMMIT_MESSAGE" value="create rotate hero after right click" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -692,14 +700,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/view.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/SFML/Graphics/Rect.inl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -731,10 +731,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/include/view.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="159" column="31" lean-forward="true" selection-start-line="159" selection-start-column="31" selection-end-line="159" selection-end-column="31" />
+        <state relative-caret-position="761">
+          <caret line="257" column="43" lean-forward="true" selection-start-line="257" selection-start-column="43" selection-end-line="257" selection-end-column="43" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
