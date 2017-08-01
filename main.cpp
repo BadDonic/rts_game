@@ -27,7 +27,7 @@ public:
 		this->x = x;
 		this->y = y;
 		image.loadFromFile("../images/" + file);
-		image.createMaskFromColor(Color(41, 33, 59));
+		image.createMaskFromColor(Color(0, 0, 255));
 		texture.loadFromImage(image);
 		sprite.setTexture(texture);
 		sprite.setTextureRect(IntRect(0, 0, this->width, this->height));
@@ -45,6 +45,7 @@ public:
 		speed = 0;
 		interactionWithMap();
 		sprite.setPosition(x , y);
+		sprite.setOrigin(width / 2, height / 2);
 		if (health <= 0) life = false;
 	}
 
@@ -96,7 +97,7 @@ int main() {
 	Sprite mapSprite;
 	mapSprite.setTexture(mapTexture);
 
-	Player p("hero.png", 250, 250, 96, 96);
+	Player p("heroForRotate.png", 250, 250, 136, 74);
 
 	Font font;
 	font.loadFromFile("../fonts/CyrilicOld.TTF");
@@ -163,6 +164,11 @@ int main() {
 						p.sprite.setColor(Color::White);
 						tempX = pos.x;
 						tempY = pos.y;
+						float dX = pos.x - p.getPlayerCoordinateX();
+						float dY = pos.y - p.getPlayerCoordinateY();
+						float rotation = (float)((atan2(dY, dX)) / M_PI * 180);
+						cout << rotation << endl;
+						p.sprite.setRotation(rotation);
 					}
 			}
 		}
@@ -217,6 +223,8 @@ int main() {
 		}else {
 			view.move(0.1, 0);
 		}
+
+
 
 		Vector2i localPosition = Mouse::getPosition(window);
 		if (localPosition.x < 3) view.move(-0.2 * time, 0);
