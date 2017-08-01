@@ -13,73 +13,44 @@ public:
 	float x, y, dx, dy, speed, moveTimer;
 	int width, height, health;
 	bool life, isMove, onGround;
-};
-
-class Player {
-public:
-	float x, y, width, height, dx, dy, speed;
-	int score, health;
-	bool life, isMove, onGround;
-	enum {left, right, up, down, jump, stay} state;
-	String file;
-	Image image;
 	Texture texture;
 	Sprite sprite;
-	Player(String filePath, float x, float y, float width, float height) {
-		dx = 0; dy = 0; speed = 0; score = 0; health = 100;
-		life = true; isMove = false; onGround = false, state = stay;
-		file = filePath;
-		this->width = width;
-		this->height = height;
-		this->x = x;
-		this->y = y;
-		image.loadFromFile("../images/" + file);
-		image.createMaskFromColor(Color(0, 0, 255));
+	String name;
+	Entity (Image &image, float &x, float &y, int &width, int &height, String &name) {
+		this->x = x; this->y = y;
+		this->width = width; this->height = height; 	this->name = name;
+		dx = 0; dy = 0;
+		moveTimer = 0;speed = 0; health = 100;
+		life = true; onGround = false; isMove = false;
 		texture.loadFromImage(image);
 		sprite.setTexture(texture);
-		sprite.setTextureRect(IntRect(0, 134, this->width, this->height));
 		sprite.setOrigin(width / 2, height / 2);
+	}
+};
 
+class Player : public Entity {
+public:
+	enum {left, right, up, down, jump, stay} state;
+	int score;
+
+	Player(Image &image, float x, float y, int width, int height, String name) : Entity(image, x, y, width, height, name) {
+		score = 0; state = stay;
+		if ( name == "Player1") sprite.setTextureRect(IntRect(4, 19, width, height));
 	}
 
 	void control() {
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			state = left;
-			speed = 0.1;
+			state = left; speed = 0.1;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			state = right;
-			speed = 0.1;
+			state = right; speed = 0.1;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Up) && onGround) {
 			state = jump; dy = -1; onGround = false;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			state = down;
-			speed = 0.1;
+			state = down; speed = 0.1;
 		}
-	}
-
-	void update(float time) {
-		control();
-		switch (state) {
-			case right: dx = speed; break;
-			case left: dx = -speed; break;
-			case up: break;
-			case down: break;
-			case jump: break;
-			case stay: break;
-
-		}
-		x += dx * time;
-		checkCollisionWithMap(dx);
-		y += dy * time;
-		checkCollisionWithMap(0, dy);
-		if (!isMove) speed = 0;
-		sprite.setPosition(x + width / 2 , y + height / 2);
-		if (health <= 0) life = false;
-		else setPlayerCoordinatesForView(x, y);
-		dy = dy + 0.0015 * time;
 	}
 
 	void checkCollisionWithMap(float dx, float dy = 0) {
@@ -97,11 +68,34 @@ public:
 					}
 					if (dx > 0) x = j * 32 - width;
 					if (dx < 0) x = j * 32 + 32;
-				} else onGround = false;
+				}
 			}
 		}
 	}
+
+	void update(float time) {
+		control();
+		switch (state) {
+			case right: dx = speed; break;
+			case left: dx = -speed; break;
+			case up: break;
+			case down: dx = 0; break;
+			case jump: break;
+			case stay: break;
+
+		}
+		x += dx * time;
+		checkCollisionWithMap(dx);
+		y += dy * time;
+		checkCollisionWithMap(0, dy);
+		sprite.setPosition(x + width / 2 , y + height / 2);
+		if (health <= 0) life = false;
+		else setPlayerCoordinatesForView(x, y);
+		if (!isMove) speed = 0;
+		dy = dy + (float)0.0015 * time;
+	}
 };
+
 
 int main() {
 	RenderWindow window(VideoMode(1366, 768), "CourseWork!!!");
