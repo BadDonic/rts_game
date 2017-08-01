@@ -96,7 +96,7 @@ public:
 	}
 };
 
-class Enemy : Entity {
+class Enemy : public Entity {
 public:
 	Enemy(Image &image, float x, float y, int width, int height, String name) : Entity(image, x, y, width, height, name) {
 		if (name == "EasyEnemy") {
@@ -142,7 +142,6 @@ int main() {
 	RenderWindow window(VideoMode(1366, 768), "CourseWork!!!");
 	view.reset(FloatRect(0, 0, 1024, 768));
 
-
 	Image mapImage;
 	mapImage.loadFromFile("../images/map.png");
 	Texture mapTexture;
@@ -150,8 +149,14 @@ int main() {
 	Sprite mapSprite;
 	mapSprite.setTexture(mapTexture);
 
-	Player p("hero.png", 250, 500, 96, 54);
+	Image heroImage;
+	heroImage.loadFromFile("../images/MilesTailsPrower.gif");
+	Player hero(heroImage, 750, 500, 40, 30, "Player1");
 
+	Image easyEnemyImage;
+	easyEnemyImage.loadFromFile("../images/shamaich.png");
+	easyEnemyImage.createMaskFromColor(Color(255, 0, 0));
+	Enemy easyEnemy(easyEnemyImage, 850, 671, 200, 97, "EasyEnemy");
 
 	Clock clock;
 	while (window.isOpen()) {
@@ -160,16 +165,13 @@ int main() {
 		clock.restart();
 		time /= 500;
 
-		Vector2i pixelPos = Mouse::getPosition(window);
-		Vector2f pos = window.mapPixelToCoords(pixelPos);
-
-
 		Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
 		}
 
-		p.update(time);
+		hero.update(time);
+		easyEnemy.update(time);
 
 		window.setView(view);
 		window.clear();
@@ -187,7 +189,8 @@ int main() {
 			}
 		}
 
-		window.draw(p.sprite);
+		window.draw(easyEnemy.sprite);
+		window.draw(hero.sprite);
 		window.display();
 	}
 	return EXIT_SUCCESS;
