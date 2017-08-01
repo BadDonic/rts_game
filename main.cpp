@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	void checkCollisionWithMap(float dx, float dy = 0) {
+	void checkCollisionWithMap(float dx, float dy) {
 		for (int i = (int) (y / 32); i < (y + height) / 32; ++i) {
 			for (int j = (int) (x / 32); j < (x + width) / 32; ++j) {
 				if (tileMap[i][j] == '0') {
@@ -85,7 +85,7 @@ public:
 
 		}
 		x += dx * time;
-		checkCollisionWithMap(dx);
+		checkCollisionWithMap(dx, 0);
 		y += dy * time;
 		checkCollisionWithMap(0, dy);
 		sprite.setPosition(x + width / 2 , y + height / 2);
@@ -94,6 +94,47 @@ public:
 		if (!isMove) speed = 0;
 		dy = dy + (float)0.0015 * time;
 	}
+};
+
+class Enemy : Entity {
+public:
+	Enemy(Image &image, float x, float y, int width, int height, String name) : Entity(image, x, y, width, height, name) {
+		if (name == "EasyEnemy") {
+			sprite.setTextureRect(IntRect(0, 0, width, height));
+			dx = 0.1;
+		}
+	}
+
+	void checkCollisionWithMap(float dx, float dy) {
+		for (int i = (int) (y / 32); i < (y + height) / 32; ++i) {
+			for (int j = (int) (x / 32); j < (x + width) / 32; ++j) {
+				if (tileMap[i][j] == '0') {
+					if (dy > 0) y = i * 32 - height;
+					if (dy < 0) y = i * 32 + 32;
+					if (dx > 0) {
+						x = j * 32 - width;
+						dx = -0.1;
+						sprite.scale(-1, 1);
+					}
+					if (dx < 0) {
+						x = j * 32 + 32;
+						dx = 0.1;
+						sprite.scale(-1, 1);
+					}
+				}
+			}
+		}
+	}
+
+	void update(float time) {
+		if (name == "EasyEnemy") {
+			x += dx * time;
+			checkCollisionWithMap(dx, 0);
+			sprite.setPosition(x + width / 2, y + height / 2);
+			if (health <= 0) life = false;
+		}
+	}
+
 };
 
 
@@ -151,3 +192,4 @@ int main() {
 	}
 	return EXIT_SUCCESS;
 }
+#pragma clang diagnostic pop
