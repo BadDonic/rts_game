@@ -8,28 +8,22 @@
 using namespace sf;
 using namespace std;
 
-enum {
-	left,
-	right,
-	up,
-	down,
-	jump,
-	stay
-} state;
+
 
 class Player {
 private: float x, y;
 public:
-	float width, height, accelX, accelY, speed;
-	int state, score, health;
+	float width, height, dX, dY, speed;
+	int score, health;
 	bool life, isMove, isSelect, onGround;
+	enum {left, right, up, down, jump, stay} state;
 	String file;
 	Image image;
 	Texture texture;
 	Sprite sprite;
 	Player(String filePath, float x, float y, float width, float height) {
-		accelX = 0; accelY = 0; speed = 0; state = 0; score = 0; health = 100;
-		life = true; isMove = false; isSelect = false, onGround = false;
+		dX = 0; dY = 0; speed = 0; score = 0; health = 100;
+		life = true; isMove = false; isSelect = false, onGround = false, state = stay;
 		file = filePath;
 		this->width = width;
 		this->height = height;
@@ -46,59 +40,67 @@ public:
 	void update(float time) {
 		control();
 		switch (state) {
-			case right: accelX = speed; break;
-			case left: accelX = -speed; break;
+			case right: dX = speed; break;
+			case left: dX = -speed; break;
 			case up: break;
 			case down: break;
 			case jump: break;
 			case stay: break;
 
 		}
-		x += accelX * time;
-		checkCollisionWithMap(accelX, 0);
-		y += accelY * time;
-		checkCollisionWithMap(0, accelY);
+		x += dX * time;
+		checkCollisionWithMap(dX, 0);
+		y += dY * time;
+		checkCollisionWithMap(0, dY);
 
 		if (!isMove) speed = 0;
 		sprite.setPosition(x + width / 2 , y + height / 2);
 		if (health <= 0) life = false;
-		accelY = accelY + 0.0015 * time;
+		if (!onGround) dY = dY + 0.0015 * time;
 	}
 
 	void control() {
 			if (Keyboard::isKeyPressed(Keyboard::Left)) {
 				state = left;
+				speed = 0.1;
+
 //				currentFrame += 0.005 * time;
 //				if (currentFrame > 3) currentFrame = 0;
 //				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 96, 96, 96));
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Right)) {
 				state = right;
+				speed = 0.1;
+
 //				currentFrame += 0.005 * time;
 //				if (currentFrame > 3) currentFrame = 0;
 //				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 192, 96, 96));
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Up) && onGround) {
-				state = jump; accelY = -0.5; onGround = false;
+				state = jump; dY = -1; onGround = false;
 //				currentFrame += 0.005 * time;
 //				if (currentFrame > 3) currentFrame = 0;
 //				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 307, 96, 96));
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Down)) {
 				state = down;
+				speed = 0.1;
 //				currentFrame += 0.005 * time;
 //				if (currentFrame > 3) currentFrame = 0;
 //				p.sprite.setTextureRect(IntRect(96 * int(currentFrame), 0, 96, 96));
 			}
-		speed = 0.1;
 	}
 
 	void checkCollisionWithMap(float accelX, float accelY) {
 		for (int i = (int)(y / 32); i < (y + height) / 32; ++i) {
 			for (int j = (int)(x / 32); j < (x + width) / 32; ++j) {
 				if (tileMap[i][j] == '0') {
-					if (accelY > 0) y = i * 32 - height;
-					if (accelY < 0) y = i * 32 + 32;
+					if (accelY > 0) {
+						y = i * 32 - height;
+						onGround = true;}
+					if (accelY < 0) {
+						y = i * 32 + 32;
+						accelY = 0;}
 					if (accelX > 0) x = j * 32 - width;
 					if (accelX < 0) x = j * 32 + 32;
 				}else onGround = false;
@@ -114,7 +116,7 @@ public:
 };
 
 int main() {
-	RenderWindow window(VideoMode(1366, 768), "SMFL works!", Style::Fullscreen);
+	RenderWindow window(VideoMode(1366, 768), "SMFL works!");
 	view.reset(FloatRect(0, 0, 1024, 768));
 	Clock clock;
 	Clock gameTimeClock;
@@ -146,7 +148,6 @@ int main() {
 	questSprite.setTextureRect(IntRect(0, 0, 340, 510));
 	questSprite.setScale(0.6f, 0.6f);
 
-	int randomGenerateTimer = 3000;
 
 	int tempX = 0;
 	int tempY = 0;
@@ -215,18 +216,6 @@ int main() {
 				p.isMove = false;
 		}
 
-		randomGenerateTimer += time;
-		if (randomGenerateTimer > 3000) {
-			randomMapGenerate();
-			randomGenerateTimer = 0;
-		}
-
-		Vector2i localPosition = Mouse::getPosition(window);
-		if (localPosition.x < 3) view.move(-0.2 * time, 0);
-		if (localPosition.x > window.getSize().x - 73) view.move(0.2 * time, 0);
-		if (localPosition.y > window.getSize().y - 58) view.move(0, 0.2 * time);
-		if (localPosition.y < 3) view.move(0, -0.2 * time);
-
 		if (p.life) setPlayerCoordinatesForView(p.getPlayerCoordinateX(), p.getPlayerCoordinateY());
 
 		p.update(time);
@@ -234,38 +223,17 @@ int main() {
 		window.setView(view);
 		window.clear();
 
-		if (getCurrentMission(p.getPlayerCoordinateX()) == 0) {
-			for (int i = 0; i < HEIGHT_MAP; ++i) {
-				for (int j = 0; j < WIDTH_MAP; ++j) {
-					if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
-					if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
-					if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
-					if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
-					if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
+		for (int i = 0; i < HEIGHT_MAP; ++i) {
+			for (int j = 0; j < WIDTH_MAP; ++j) {
+				if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
+				if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
+				if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
+				if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
+				if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
 
-					mapSprite.setPosition(j * 32, i * 32);
-					window.draw(mapSprite);
-				}
+				mapSprite.setPosition(j * 32, i * 32);
+				window.draw(mapSprite);
 			}
-		}
-		if (getCurrentMission(p.getPlayerCoordinateX()) == 1) {
-			for (int i = 0; i < HEIGHT_MAP; ++i) {
-				for (int j = 0; j < WIDTH_MAP; ++j) {
-					if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
-					if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
-					if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
-					if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
-					if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
-
-					mapSprite.setPosition(j * 32, i * 32);
-					window.draw(mapSprite);
-				}
-			}
-		}
-		if (!showMissionText) {
-			text.setPosition(view.getCenter().x + 125, view.getCenter().y - 130);
-			questSprite.setPosition(view.getCenter().x + 115, view.getCenter().y - 130);
-			window.draw(questSprite); window.draw(text);
 		}
 
 		window.draw(p.sprite);
