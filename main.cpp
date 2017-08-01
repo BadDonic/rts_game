@@ -3,6 +3,7 @@
 #include <map.h>
 #include <view.h>
 #include <mission.h>
+#include <cmath>
 
 using namespace sf;
 using namespace std;
@@ -12,14 +13,14 @@ private: float x, y;
 public:
 	float width, height, accelX, accelY, speed;
 	int dir, score, health;
-	bool life;
+	bool life, isMove, isSelect;
 	String file;
 	Image image;
 	Texture texture;
 	Sprite sprite;
 	Player(String filePath, float x, float y, float width, float height) {
 		accelX = 0; accelY = 0; speed = 0; dir = 0; score = 0; health = 100;
-		life = true;
+		life = true; isMove = false; isSelect = false;
 		file = filePath;
 		this->width = width;
 		this->height = height;
@@ -115,10 +116,11 @@ int main() {
 
 	int randomGenerateTimer = 3000;
 
+	int tempX = 0;
+	int tempY = 0;
+	float distance = 0;
 
-	bool isMove = false;
-	float dX = 0;
-	float dY = 0;
+
 	while (window.isOpen()) {
 
 
@@ -133,21 +135,6 @@ int main() {
 		Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
-			if (event.type == Event::MouseButtonPressed)
-				if (event.key.code == Mouse::Left) {
-					if (p.sprite.getGlobalBounds().contains(pos.x, pos.y)){
-						dX = pos.x - p.sprite.getPosition().x;
-						dY = pos.y - p.sprite.getPosition().y;
-						isMove = true;
-					}
-				}
-
-			if (event.type == Event::MouseButtonReleased)
-				if (event.key.code == Mouse::Left) {
-					isMove = false;
-					p.sprite.setColor(Color::White);
-				}
-
 			if (event.type == Event::KeyPressed)
 				if (event.key.code == Keyboard::Tab) {
 					switch (showMissionText){
@@ -162,19 +149,39 @@ int main() {
 							break;
 					}
 				}
+			if (event.type == Event::MouseButtonPressed) {
+				if (event.key.code == Mouse::Left)
+					if (p.sprite.getGlobalBounds().contains(pos.x, pos.y)) {
+						p.sprite.setColor(Color::Green);
+						p.isSelect = true;
+					}
+
+				if (p.isSelect)
+					if (event.key.code == Mouse::Right) {
+						p.isMove = true;
+						p.isSelect = false;
+						p.sprite.setColor(Color::White);
+						tempX = pos.x;
+						tempY = pos.y;
+					}
+			}
+		}
+
+		if (p.isMove) {
+			distance = (float)sqrt(pow(tempX - p.getPlayerCoordinateX(), 2) + pow(tempY - p.getPlayerCoordinateY(), 2));
+
+			if (distance > 2) {
+				p.setPlayerCoordinateX((float)(p.getPlayerCoordinateX() + 0.1 * time *(tempX - p.getPlayerCoordinateX()) / distance));
+				p.setPlayerCoordinateY((float)(p.getPlayerCoordinateY() + 0.1 * time *(tempY - p.getPlayerCoordinateY()) / distance));
+
+			}else
+				p.isMove = false;
 		}
 
 		randomGenerateTimer += time;
 		if (randomGenerateTimer > 3000) {
 			randomMapGenerate();
 			randomGenerateTimer = 0;
-		}
-
-		if (isMove) {
-			p.sprite.setColor(Color::Green);
-			p.setPlayerCoordinateX(pos.x - dX);
-			p.setPlayerCoordinateY(pos.y - dY);
-
 		}
 
 		if (p.life) {
