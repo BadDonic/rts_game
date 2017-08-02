@@ -113,12 +113,12 @@ public:
 					if (dy < 0) y = i * 32 + 32;
 					if (dx > 0) {
 						x = j * 32 - width;
-						dx = -0.1;
+						this->dx = -0.1;
 						sprite.scale(-1, 1);
 					}
 					if (dx < 0) {
 						x = j * 32 + 32;
-						dx = 0.1;
+						this->dx = 0.1;
 						sprite.scale(-1, 1);
 					}
 				}
@@ -128,8 +128,8 @@ public:
 
 	void update(float time) {
 		if (name == "EasyEnemy") {
-			x += dx * time;
 			checkCollisionWithMap(dx, 0);
+			x += dx * time;
 			sprite.setPosition(x + width / 2, y + height / 2);
 			if (health <= 0) life = false;
 		}
@@ -151,11 +151,12 @@ int main() {
 
 	Image heroImage;
 	heroImage.loadFromFile("../images/MilesTailsPrower.gif");
+	heroImage.createMaskFromColor(Color::Black);
 	Player hero(heroImage, 750, 500, 40, 30, "Player1");
 
 	Image easyEnemyImage;
 	easyEnemyImage.loadFromFile("../images/shamaich.png");
-	easyEnemyImage.createMaskFromColor(Color(255, 0, 0));
+	easyEnemyImage.createMaskFromColor(Color::Red);
 	Enemy easyEnemy(easyEnemyImage, 850, 671, 200, 97, "EasyEnemy");
 
 	Clock clock;
