@@ -28,6 +28,8 @@ public:
 		sprite.setOrigin(width / 2, height / 2);
 	}
 
+	virtual void update(float time) = 0;
+
 	FloatRect getRect() { return FloatRect(x, y, width, height); }
 };
 
@@ -132,7 +134,7 @@ int main() {
 	view.reset(FloatRect(0, 0, 480, 640));
 
 	Level lvl;
-	lvl.LoadFromFile("../map.tmx");
+	lvl.LoadFromFile("../images/map.tmx");
 
 	Image heroImage;
 	heroImage.loadFromFile("../images/MilesTailsPrower.gif");
@@ -143,10 +145,16 @@ int main() {
 	Image easyEnemyImage;
 	easyEnemyImage.loadFromFile("../images/shamaich.png");
 	easyEnemyImage.createMaskFromColor(Color::Red);
-	Object easyEnemyObj = lvl.GetObject("easyEnemy");
 
 	Player hero(heroImage, "Player1", lvl, heroObj.rect.left, heroObj.rect.top, 40, 30);
-	Enemy easyEnemy(easyEnemyImage, "EasyEnemy", lvl, easyEnemyObj.rect.left, easyEnemyObj.rect.top, 200, 97);
+
+
+	list<Entity *> entities;
+
+	vector<Object> objs = lvl.GetObjects("easyEnemy");
+
+	for (int i = 0; i < objs.size(); ++i)
+		entities.push_back(new Enemy(easyEnemyImage, "EasyEnemy", lvl, objs[i].rect.left, objs[i].rect.top, 200, 97));
 
 	Clock clock;
 	while (window.isOpen()) {
@@ -161,14 +169,17 @@ int main() {
 		}
 
 		hero.update(time);
-		easyEnemy.update(time);
+		for (auto it = entities.begin(); it != entities.end(); it++)
+			(*it)->update(time);
 
 		window.setView(view);
 		window.clear(Color(77,83,140));
 
 		lvl.Draw(window);
 
-		window.draw(easyEnemy.sprite);
+		for (auto it = entities.begin(); it != entities.end(); it++)
+			window.draw((*it)->sprite);
+
 		window.draw(hero.sprite);
 		window.display();
 	}
