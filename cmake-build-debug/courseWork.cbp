@@ -45,6 +45,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/home/daniel/Programming/C.C++/Projects/courseWork/include"/>
+					<Add directory="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML"/>
 					<Add directory="/usr/include/c++/6"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/6"/>
 					<Add directory="/usr/include/c++/6/backward"/>
@@ -69,6 +70,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/home/daniel/Programming/C.C++/Projects/courseWork/include"/>
+					<Add directory="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML"/>
 					<Add directory="/usr/include/c++/6"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/6"/>
 					<Add directory="/usr/include/c++/6/backward"/>
@@ -86,6 +88,27 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinystr.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinystr.h">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinyxml.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinyxml.h">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinyxmlerror.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinyxmlparser.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/level.h">
+			<Option target="courseWork"/>
+		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/map.h">
 			<Option target="courseWork"/>
 		</Unit>

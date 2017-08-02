@@ -1,22 +1,23 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include <map.h>
 #include <view.h>
-#include <mission.h>
-#include <cmath>
+#include <level.h>
+#include <vector>
+#include <list>
 
 using namespace sf;
 using namespace std;
 
 class Entity {
 public:
+	vector<Object> obj;
 	float x, y, dx, dy, speed, moveTimer;
 	int width, height, health;
 	bool life, isMove, onGround;
 	Texture texture;
 	Sprite sprite;
 	String name;
-	Entity (Image &image, float &x, float &y, int &width, int &height, String &name) {
+	Entity (Image &image, String &name, float &x, float &y, int &width, int &height) {
 		this->x = x; this->y = y;
 		this->width = width; this->height = height; 	this->name = name;
 		dx = 0; dy = 0;
@@ -26,6 +27,8 @@ public:
 		sprite.setTexture(texture);
 		sprite.setOrigin(width / 2, height / 2);
 	}
+
+	FloatRect getRect() { return FloatRect(x, y, width, height); }
 };
 
 class Player : public Entity {
@@ -33,8 +36,8 @@ public:
 	enum {left, right, up, down, jump, stay} state;
 	int score;
 
-	Player(Image &image, float x, float y, int width, int height, String name) : Entity(image, x, y, width, height, name) {
-		score = 0; state = stay;
+	Player(Image &image, String name, Level &level, float x, float y, int width, int height) : Entity(image, name, x, y, width, height) {
+		score = 0; state = stay; obj = level.GetAllObjects();
 		if ( name == "Player1") sprite.setTextureRect(IntRect(4, 19, width, height));
 	}
 
@@ -54,22 +57,16 @@ public:
 	}
 
 	void checkCollisionWithMap(float dx, float dy) {
-		for (int i = (int) (y / 32); i < (y + height) / 32; ++i) {
-			for (int j = (int) (x / 32); j < (x + width) / 32; ++j) {
-				if (tileMap[i][j] == '0') {
-					if (dy > 0) {
-						y = i * 32 - height;
-						onGround = true;
-						this->dy = 0;
-					}
-					if (dy < 0) {
-						y = i * 32 + 32;
-						this->dy = 0;
-					}
-					if (dx > 0) x = j * 32 - width;
-					if (dx < 0) x = j * 32 + 32;
+		for (int i = 0; i < obj.size(); ++i) {
+			if (getRect().intersects(obj[i].rect)) {
+				if (obj[i].name == "solid") {
+					if (dy>0)	{ y = obj[i].rect.top - height;  this->dy = 0; onGround = true; }
+					if (dy<0)	{ y = obj[i].rect.top + obj[i].rect.height;   this->dy = 0; }
+					if (dx>0)	{ x = obj[i].rect.left - width; }
+					if (dx<0)	{ x = obj[i].rect.left + obj[i].rect.width; }
 				}
 			}
+			
 		}
 	}
 
@@ -98,7 +95,8 @@ public:
 
 class Enemy : public Entity {
 public:
-	Enemy(Image &image, float x, float y, int width, int height, String name) : Entity(image, x, y, width, height, name) {
+	Enemy(Image &image, String name, Level &level, float x, float y, int width, int height) : Entity(image, name, x, y, width, height) {
+		obj = level.GetObjects("solid");
 		if (name == "EasyEnemy") {
 			sprite.setTextureRect(IntRect(0, 0, width, height));
 			dx = 0.1;
@@ -106,22 +104,13 @@ public:
 	}
 
 	void checkCollisionWithMap(float dx, float dy) {
-		for (int i = (int) (y / 32); i < (y + height) / 32; ++i) {
-			for (int j = (int) (x / 32); j < (x + width) / 32; ++j) {
-				if (tileMap[i][j] == '0') {
-					if (dy > 0) y = i * 32 - height;
-					if (dy < 0) y = i * 32 + 32;
-					if (dx > 0) {
-						x = j * 32 - width;
-						this->dx = -0.1;
-						sprite.scale(-1, 1);
-					}
-					if (dx < 0) {
-						x = j * 32 + 32;
-						this->dx = 0.1;
-						sprite.scale(-1, 1);
-					}
-				}
+		for (int i = 0; i < obj.size(); ++i) {
+			if (getRect().intersects(obj[i].rect)) {
+				if (dy > 0) y = obj[i].rect.top - height;
+				if (dy < 0) y = obj[i].rect.top + obj[i].rect.height;
+				if (dx > 0) { x = obj[i].rect.left - width; this->dx = -0.1; sprite.scale(-1, 1); }
+				if (dx < 0) {
+					x = obj[i].rect.left+ obj[i].rect.width; this->dx = 0.1; sprite.scale(-1, 1); }
 			}
 		}
 	}
@@ -139,25 +128,25 @@ public:
 
 
 int main() {
-	RenderWindow window(VideoMode(1366, 768), "CourseWork!!!");
-	view.reset(FloatRect(0, 0, 1024, 768));
+	RenderWindow window(VideoMode(640, 480), "CourseWork!!!");
+	view.reset(FloatRect(0, 0, 480, 640));
 
-	Image mapImage;
-	mapImage.loadFromFile("../images/map.png");
-	Texture mapTexture;
-	mapTexture.loadFromImage(mapImage);
-	Sprite mapSprite;
-	mapSprite.setTexture(mapTexture);
+	Level lvl;
+	lvl.LoadFromFile("../map.tmx");
 
 	Image heroImage;
 	heroImage.loadFromFile("../images/MilesTailsPrower.gif");
 	heroImage.createMaskFromColor(Color::Black);
-	Player hero(heroImage, 750, 500, 40, 30, "Player1");
+	Object heroObj = lvl.GetObject("player");
+
 
 	Image easyEnemyImage;
 	easyEnemyImage.loadFromFile("../images/shamaich.png");
 	easyEnemyImage.createMaskFromColor(Color::Red);
-	Enemy easyEnemy(easyEnemyImage, 850, 671, 200, 97, "EasyEnemy");
+	Object easyEnemyObj = lvl.GetObject("easyEnemy");
+
+	Player hero(heroImage, "Player1", lvl, heroObj.rect.left, heroObj.rect.top, 40, 30);
+	Enemy easyEnemy(easyEnemyImage, "EasyEnemy", lvl, easyEnemyObj.rect.left, easyEnemyObj.rect.top, 200, 97);
 
 	Clock clock;
 	while (window.isOpen()) {
@@ -175,20 +164,9 @@ int main() {
 		easyEnemy.update(time);
 
 		window.setView(view);
-		window.clear();
+		window.clear(Color(77,83,140));
 
-		for (int i = 0; i < HEIGHT_MAP; ++i) {
-			for (int j = 0; j < WIDTH_MAP; ++j) {
-				if (tileMap[i][j] == ' ') mapSprite.setTextureRect(IntRect(0, 0, 32, 32));
-				if (tileMap[i][j] == 's') mapSprite.setTextureRect(IntRect(32, 0, 32, 32));
-				if (tileMap[i][j] == '0') mapSprite.setTextureRect(IntRect(64, 0, 32, 32));
-				if (tileMap[i][j] == 'f') mapSprite.setTextureRect(IntRect(96, 0, 32, 32));
-				if (tileMap[i][j] == 'h') mapSprite.setTextureRect(IntRect(128, 0, 32, 32));
-
-				mapSprite.setPosition(j * 32, i * 32);
-				window.draw(mapSprite);
-			}
-		}
+		lvl.Draw(window);
 
 		window.draw(easyEnemy.sprite);
 		window.draw(hero.sprite);
