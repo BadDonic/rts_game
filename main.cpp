@@ -153,8 +153,8 @@ int main() {
 
 	vector<Object> objs = lvl.GetObjects("easyEnemy");
 
-	for (int i = 0; i < objs.size(); ++i)
-		entities.push_back(new Enemy(easyEnemyImage, "EasyEnemy", lvl, objs[i].rect.left, objs[i].rect.top, 200, 97));
+	for (auto &obj : objs)
+		entities.push_back(new Enemy(easyEnemyImage, "EasyEnemy", lvl, obj.rect.left, obj.rect.top, 200, 97));
 
 	Clock clock;
 	while (window.isOpen()) {
@@ -163,22 +163,39 @@ int main() {
 		clock.restart();
 		time /= 500;
 
-		Event event;
+		Event event = {};
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
 		}
 
 		hero.update(time);
-		for (auto it = entities.begin(); it != entities.end(); it++)
-			(*it)->update(time);
+		for (auto iter = entities.begin(); iter != entities.end();) {
+			Entity * temp = *iter;
+			temp->update(time);
+			if (!temp->life) {
+				iter = entities.erase(iter);
+				delete(temp);
+			}else iter++;
+		}
+
+		for (auto iter = entities.begin(); iter != entities.end(); iter++) {
+			if ((*iter)->getRect().intersects(hero.getRect()))
+				if ((*iter)->name == "EasyEnemy")
+					if (hero.dy > 0 && !hero.onGround) {
+						(*iter)->dx = 0;
+						hero.dy = -0.2;
+						(*iter)->health = 0;
+					}else hero.health -= 5;
+		}
+
 
 		window.setView(view);
 		window.clear(Color(77,83,140));
 
 		lvl.Draw(window);
 
-		for (auto it = entities.begin(); it != entities.end(); it++)
-			window.draw((*it)->sprite);
+		for (auto &entity : entities)
+			window.draw(entity->sprite);
 
 		window.draw(hero.sprite);
 		window.display();
