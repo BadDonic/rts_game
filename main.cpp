@@ -128,6 +128,19 @@ public:
 
 };
 
+class MovingPlatform : public Entity {
+public:
+	MovingPlatform(Image &image, String name, Level &lvl, float x, float y, int width, int height) : Entity(image, name, x, y, width, height) {
+		sprite.setTextureRect(IntRect(0, 0, width, height));
+		dx = 0.08;
+	}
+	void update(float time) {
+		x += dx * time;
+		moveTimer += time;
+		if (moveTimer > 3000) { dx *= -1; moveTimer = 0; }
+		sprite.setPosition(x + width / 2, y + height / 2);
+	}
+};
 
 int main() {
 	RenderWindow window(VideoMode(640, 480), "CourseWork!!!");
@@ -178,14 +191,21 @@ int main() {
 			}else iter++;
 		}
 
-		for (auto iter = entities.begin(); iter != entities.end(); iter++) {
-			if ((*iter)->getRect().intersects(hero.getRect()))
-				if ((*iter)->name == "EasyEnemy")
+		for (auto &iter : entities) {
+			if (iter->getRect().intersects(hero.getRect()))
+				if (iter->name == "EasyEnemy")
 					if (hero.dy > 0 && !hero.onGround) {
-						(*iter)->dx = 0;
-						hero.dy = -0.2;
-						(*iter)->health = 0;
+						iter->dx = 0;
+						hero.dy = (float)-0.2;
+						iter->health = 0;
 					}else hero.health -= 5;
+			for (auto &iter2 : entities) {
+				if (iter->getRect() != iter2->getRect())
+					if (iter->getRect().intersects(iter2->getRect())) {
+						iter->dx *= -1;
+						iter->sprite.scale(-1, 1);
+					}
+			}
 		}
 
 
