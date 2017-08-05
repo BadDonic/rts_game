@@ -1,9 +1,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <view.h>
 #include <level.h>
 #include <vector>
 #include <list>
+#include <lifeBar.h>
 
 using namespace sf;
 using namespace std;
@@ -181,6 +183,17 @@ int main() {
 	Level lvl;
 	lvl.LoadFromFile("../images/map.tmx");
 
+	LifeBar lifeBarPlayer;
+
+	SoundBuffer shootBuffer;
+	shootBuffer.loadFromFile("../sound/shoot.ogg");
+	Sound shootSound;
+	shootSound.setBuffer(shootBuffer);
+
+	Music music;
+	music.openFromFile("../sound/Something_Just_Like_This.ogg");
+	music.play();
+
 	Image heroImage;
 	heroImage.loadFromFile("../images/MilesTailsPrower.gif");
 	heroImage.createMaskFromColor(Color::Black);
@@ -220,9 +233,13 @@ int main() {
 		Event event = {};
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
-			if (event.type == Event::KeyPressed)
-				if (event.key.code == Keyboard::Space) entities.push_back(new Bullet(bulletImage, "Bullet", lvl, hero.x, hero.y, 16, 16, hero.state));
+			if (event.type == Event::KeyPressed || event.type == Event::KeyReleased)
+				if (event.key.code == Keyboard::Space) {
+					entities.push_back(new Bullet(bulletImage, "Bullet", lvl, hero.x, hero.y, 16, 16, hero.state));
+					shootSound.play();
+				}
 		}
+		lifeBarPlayer.update(hero.health);
 
 		hero.update(time);
 		for (auto iter = entities.begin(); iter != entities.end();) {
@@ -250,7 +267,7 @@ int main() {
 						iter->dx = 0;
 						hero.dy = (float) -0.2;
 						iter->health = 0;
-					} else hero.health -= 5;
+					} else hero.health -= 0.00000000000005;
 			}
 			for (auto &iter2 : entities) {
 				if (iter->getRect() != iter2->getRect())
@@ -270,6 +287,7 @@ int main() {
 		for (auto &entity : entities)
 			window.draw(entity->sprite);
 
+		lifeBarPlayer.draw(window);
 		window.draw(hero.sprite);
 		window.display();
 	}

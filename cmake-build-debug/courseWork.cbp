@@ -109,6 +109,9 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/level.h">
 			<Option target="courseWork"/>
 		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/lifeBar.h">
+			<Option target="courseWork"/>
+		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/map.h">
 			<Option target="courseWork"/>
 		</Unit>

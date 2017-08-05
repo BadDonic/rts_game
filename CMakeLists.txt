@@ -8,4 +8,4 @@ include_directories(TinyXML)
 
 file(GLOB SOURCES "main.cpp" "src/*.cpp" "include/*.h" "TinyXML/*.h" "TinyXML/*.cpp")
 add_executable(courseWork ${SOURCES})
-target_link_libraries(courseWork "-lsfml-graphics -lsfml-window -lsfml-system")
+target_link_libraries(courseWork "-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio")
