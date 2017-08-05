@@ -35,7 +35,7 @@ public:
 
 class Player : public Entity {
 public:
-	enum {left, right, up, down, jump, stay} state;
+	enum {left, right, up, down, jump, stay, rightTop} state;
 	int score;
 
 	Player(Image &image, String name, Level &level, float x, float y, int width, int height) : Entity(image, name, x, y, width, height) {
@@ -44,31 +44,29 @@ public:
 	}
 
 	void control() {
-		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			state = left; speed = 0.1;
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			state = right; speed = 0.1;
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Up) && onGround) {
-			state = jump; dy = -1; onGround = false;
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			state = down; speed = 0.1;
-		}
+		if (Keyboard::isKeyPressed(Keyboard::Left)) { state = left; speed = 0.1; }
+		if (Keyboard::isKeyPressed(Keyboard::Right)) { state = right; speed = 0.1; }
+		if (Keyboard::isKeyPressed(Keyboard::Up) && onGround) { state = jump; dy = -1; onGround = false; }
+		if (Keyboard::isKeyPressed(Keyboard::Down)) { state = down; speed = 0.1; }
+		if (Keyboard::isKeyPressed(Keyboard::Right) && Keyboard::isKeyPressed(Keyboard::Up)) state = rightTop;
 	}
 
 	void checkCollisionWithMap(float dx, float dy) {
 		for (int i = 0; i < obj.size(); ++i) {
-			if (getRect().intersects(obj[i].rect)) {
+			if (getRect().intersects(obj[i].rect))
 				if (obj[i].name == "solid") {
-					if (dy>0)	{ y = obj[i].rect.top - height;  this->dy = 0; onGround = true; }
-					if (dy<0)	{ y = obj[i].rect.top + obj[i].rect.height;   this->dy = 0; }
-					if (dx>0)	{ x = obj[i].rect.left - width; }
-					if (dx<0)	{ x = obj[i].rect.left + obj[i].rect.width; }
+					if (dy > 0) {
+						y = obj[i].rect.top - height;
+						this->dy = 0;
+						onGround = true;
+					}
+					if (dy < 0) {
+						y = obj[i].rect.top + obj[i].rect.height;
+						this->dy = 0;
+					}
+					if (dx > 0) { x = obj[i].rect.left - width; }
+					if (dx < 0) { x = obj[i].rect.left + obj[i].rect.width; }
 				}
-			}
-			
 		}
 	}
 
@@ -81,7 +79,7 @@ public:
 			case down: dx = 0; break;
 			case jump: break;
 			case stay: break;
-
+			case rightTop: dx = speed;break;
 		}
 		x += dx * time;
 		checkCollisionWithMap(dx, 0);
@@ -142,6 +140,40 @@ public:
 	}
 };
 
+class Bullet : public Entity {
+public:
+	int direction;
+
+	Bullet (Image &image, String name, Level &lvl, float x, float y, int width, int height, int dir) : Entity(image, name, x, y, width,height) {
+		obj = lvl.GetObjects("solid");
+		direction = dir;
+		speed = 0.8;
+	}
+
+	void update(float time) {
+		switch (direction) {
+			case 0: dx = -speed; dy = 0; break;
+			case 1: dx = speed; dy = 0; break;
+			case 2: dx = 0; dy = -speed; break;
+			case 3: dx = 0; dy = -speed; break;
+			case 4: dx = 0; dy = -speed; break;
+			case 5: dx = 0; dy = -speed; break;
+			case 6: dx = speed; dy = -speed; break;
+		}
+
+		x += dx * time;
+		y += dy * time;
+
+		if (x <= 0) x = 1;
+		if (y <= 0) y = 1;
+
+		for (auto &i : obj)
+			if (getRect().intersects(i.rect)) life = false;
+
+		sprite.setPosition(x + width / 2, y + height / 2);
+	}
+};
+
 int main() {
 	RenderWindow window(VideoMode(640, 480), "CourseWork!!!");
 	view.reset(FloatRect(0, 0, 480, 640));
@@ -154,20 +186,29 @@ int main() {
 	heroImage.createMaskFromColor(Color::Black);
 	Object heroObj = lvl.GetObject("player");
 
-
 	Image easyEnemyImage;
 	easyEnemyImage.loadFromFile("../images/shamaich.png");
 	easyEnemyImage.createMaskFromColor(Color::Red);
+	vector<Object> objs = lvl.GetObjects("easyEnemy");
+
+	Image movingPlatformImage;
+	movingPlatformImage.loadFromFile("../images/movingPlatform.png");
+	vector<Object> movingPlatformObjs = lvl.GetObjects("MovingPlatform");
+
+	Image bulletImage;
+	bulletImage.loadFromFile("../images/bullet.png");
+	bulletImage.createMaskFromColor(Color::Black);
 
 	Player hero(heroImage, "Player1", lvl, heroObj.rect.left, heroObj.rect.top, 40, 30);
 
-
 	list<Entity *> entities;
 
-	vector<Object> objs = lvl.GetObjects("easyEnemy");
 
 	for (auto &obj : objs)
 		entities.push_back(new Enemy(easyEnemyImage, "EasyEnemy", lvl, obj.rect.left, obj.rect.top, 200, 97));
+
+	for (auto &obj : movingPlatformObjs)
+		entities.push_back(new MovingPlatform(movingPlatformImage, "MovingPlatform", lvl, obj.rect.left, obj.rect.top, 95, 22));
 
 	Clock clock;
 	while (window.isOpen()) {
@@ -179,6 +220,8 @@ int main() {
 		Event event = {};
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
+			if (event.type == Event::KeyPressed)
+				if (event.key.code == Keyboard::Space) entities.push_back(new Bullet(bulletImage, "Bullet", lvl, hero.x, hero.y, 16, 16, hero.state));
 		}
 
 		hero.update(time);
@@ -192,13 +235,23 @@ int main() {
 		}
 
 		for (auto &iter : entities) {
-			if (iter->getRect().intersects(hero.getRect()))
+			if (iter->getRect().intersects(hero.getRect())) {
+				if (iter->name == "MovingPlatform") {
+					if (hero.dy > 0)
+						if (hero.y + hero.height < iter->y +  iter->height) {
+							hero.y = iter->y - hero.height + 3;
+							hero.x += iter->dx * time;
+							hero.dy = 0;
+							hero.onGround = true;
+						}
+				}
 				if (iter->name == "EasyEnemy")
 					if (hero.dy > 0 && !hero.onGround) {
 						iter->dx = 0;
-						hero.dy = (float)-0.2;
+						hero.dy = (float) -0.2;
 						iter->health = 0;
-					}else hero.health -= 5;
+					} else hero.health -= 5;
+			}
 			for (auto &iter2 : entities) {
 				if (iter->getRect() != iter2->getRect())
 					if (iter->getRect().intersects(iter2->getRect())) {
