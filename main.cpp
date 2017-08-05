@@ -6,6 +6,7 @@
 #include <vector>
 #include <list>
 #include <lifeBar.h>
+#include <menu.h>
 
 using namespace sf;
 using namespace std;
@@ -177,8 +178,9 @@ public:
 };
 
 int main() {
-	RenderWindow window(VideoMode(640, 480), "CourseWork!!!");
-	view.reset(FloatRect(0, 0, 480, 640));
+	RenderWindow window(VideoMode(1366, 640), "CourseWork!!!");
+	menu(window);
+	view.reset(FloatRect(0, 0, 1366, 640));
 
 	Level lvl;
 	lvl.LoadFromFile("../images/map.tmx");
