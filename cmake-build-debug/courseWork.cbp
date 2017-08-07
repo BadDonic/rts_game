@@ -106,28 +106,28 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinyxmlparser.cpp">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/game.h">
-			<Option target="courseWork"/>
-		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/level.h">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/lifeBar.h">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/map.h">
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/player.h">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/menu.h">
-			<Option target="courseWork"/>
-		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/mission.h">
-			<Option target="courseWork"/>
-		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/view.h">
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/resource.h">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/main.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/level.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/player.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/resource.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/CMakeLists.txt">

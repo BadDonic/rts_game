@@ -1,11 +1,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <../include/view.h>
 #include <level.h>
-#include <vector>
 #include <list>
-#include <lifeBar.h>
 
 using namespace sf;
 using namespace std;
@@ -33,66 +30,6 @@ public:
 	virtual void update(float time) = 0;
 
 	FloatRect getRect() { return FloatRect(x, y, width, height); }
-};
-
-class Player : public Entity {
-public:
-	enum {left, right, up, down, jump, stay, rightTop} state;
-	int score;
-
-	Player(Image &image, String name, Level &level, float x, float y, int width, int height) : Entity(image, name, x, y, width, height) {
-		score = 0; state = stay; obj = level.GetAllObjects();
-		if ( name == "Player1") sprite.setTextureRect(IntRect(4, 19, width, height));
-	}
-
-	void control() {
-		if (Keyboard::isKeyPressed(Keyboard::Left)) { state = left; speed = 0.1; }
-		if (Keyboard::isKeyPressed(Keyboard::Right)) { state = right; speed = 0.1; }
-		if (Keyboard::isKeyPressed(Keyboard::Up) && onGround) { state = jump; dy = -1; onGround = false; }
-		if (Keyboard::isKeyPressed(Keyboard::Down)) { state = down; speed = 0.1; }
-		if (Keyboard::isKeyPressed(Keyboard::Right) && Keyboard::isKeyPressed(Keyboard::Up)) state = rightTop;
-	}
-
-	void checkCollisionWithMap(float dx, float dy) {
-		for (int i = 0; i < obj.size(); ++i) {
-			if (getRect().intersects(obj[i].rect))
-				if (obj[i].name == "solid") {
-					if (dy > 0) {
-						y = obj[i].rect.top - height;
-						this->dy = 0;
-						onGround = true;
-					}
-					if (dy < 0) {
-						y = obj[i].rect.top + obj[i].rect.height;
-						this->dy = 0;
-					}
-					if (dx > 0) { x = obj[i].rect.left - width; }
-					if (dx < 0) { x = obj[i].rect.left + obj[i].rect.width; }
-				}
-		}
-	}
-
-	void update(float time) {
-		control();
-		switch (state) {
-			case right: dx = speed; break;
-			case left: dx = -speed; break;
-			case up: break;
-			case down: dx = 0; break;
-			case jump: break;
-			case stay: break;
-			case rightTop: dx = speed;break;
-		}
-		x += dx * time;
-		checkCollisionWithMap(dx, 0);
-		y += dy * time;
-		checkCollisionWithMap(0, dy);
-		sprite.setPosition(x + width / 2 , y + height / 2);
-		if (health <= 0) life = false;
-		else setPlayerCoordinatesForView(x, y);
-		if (!isMove) speed = 0;
-		dy = dy + (float)0.0015 * time;
-	}
 };
 
 class Enemy : public Entity {
@@ -126,20 +63,6 @@ public:
 		}
 	}
 
-};
-
-class MovingPlatform : public Entity {
-public:
-	MovingPlatform(Image &image, String name, Level &lvl, float x, float y, int width, int height) : Entity(image, name, x, y, width, height) {
-		sprite.setTextureRect(IntRect(0, 0, width, height));
-		dx = 0.08;
-	}
-	void update(float time) {
-		x += dx * time;
-		moveTimer += time;
-		if (moveTimer > 3000) { dx *= -1; moveTimer = 0; }
-		sprite.setPosition(x + width / 2, y + height / 2);
-	}
 };
 
 class Bullet : public Entity {
@@ -179,15 +102,18 @@ public:
 
 
 int main() {
-	RenderWindow window(VideoMode(1366, 640), "CourseWork!!!");
-	view.reset(FloatRect(0, 0, 1366, 640));
+	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft2",Style::Fullscreen);
+	View view;
+	view.setSize(window.getSize().x, window.getSize().y);
+	view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
+	Font font;
+	font.loadFromFile("../fonts/Roboto-Italic.ttf");
 
-	Level lvl;
-	lvl.LoadFromFile("../images/map.tmx");
-
+	Level lvl("../images/map.tmx");
 	Clock clock;
+
 	while (window.isOpen()) {
-		float time = clock.getElapsedTime().asMicroseconds();
+		double time = clock.getElapsedTime().asMicroseconds();
 
 		clock.restart();
 		time /= 500;
@@ -195,10 +121,11 @@ int main() {
 		Event event = {};
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
+
 		}
 
+		controlView(view, window, time);
 		window.setView(view);
-		window.clear(Color(77,83,140));
 		lvl.Draw(window);
 		window.display();
 	}
