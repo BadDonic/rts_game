@@ -1,12 +1,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <view.h>
+#include <../include/view.h>
 #include <level.h>
 #include <vector>
 #include <list>
 #include <lifeBar.h>
-#include <menu.h>
 
 using namespace sf;
 using namespace std;
@@ -177,53 +176,14 @@ public:
 	}
 };
 
+
+
 int main() {
 	RenderWindow window(VideoMode(1366, 640), "CourseWork!!!");
-	menu(window);
 	view.reset(FloatRect(0, 0, 1366, 640));
 
 	Level lvl;
 	lvl.LoadFromFile("../images/map.tmx");
-
-	LifeBar lifeBarPlayer;
-
-	SoundBuffer shootBuffer;
-	shootBuffer.loadFromFile("../sound/shoot.ogg");
-	Sound shootSound;
-	shootSound.setBuffer(shootBuffer);
-
-	Music music;
-	music.openFromFile("../sound/Something_Just_Like_This.ogg");
-	music.play();
-
-	Image heroImage;
-	heroImage.loadFromFile("../images/MilesTailsPrower.gif");
-	heroImage.createMaskFromColor(Color::Black);
-	Object heroObj = lvl.GetObject("player");
-
-	Image easyEnemyImage;
-	easyEnemyImage.loadFromFile("../images/shamaich.png");
-	easyEnemyImage.createMaskFromColor(Color::Red);
-	vector<Object> objs = lvl.GetObjects("easyEnemy");
-
-	Image movingPlatformImage;
-	movingPlatformImage.loadFromFile("../images/movingPlatform.png");
-	vector<Object> movingPlatformObjs = lvl.GetObjects("MovingPlatform");
-
-	Image bulletImage;
-	bulletImage.loadFromFile("../images/bullet.png");
-	bulletImage.createMaskFromColor(Color::Black);
-
-	Player hero(heroImage, "Player1", lvl, heroObj.rect.left, heroObj.rect.top, 40, 30);
-
-	list<Entity *> entities;
-
-
-	for (auto &obj : objs)
-		entities.push_back(new Enemy(easyEnemyImage, "EasyEnemy", lvl, obj.rect.left, obj.rect.top, 200, 97));
-
-	for (auto &obj : movingPlatformObjs)
-		entities.push_back(new MovingPlatform(movingPlatformImage, "MovingPlatform", lvl, obj.rect.left, obj.rect.top, 95, 22));
 
 	Clock clock;
 	while (window.isOpen()) {
@@ -235,64 +195,14 @@ int main() {
 		Event event = {};
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) window.close();
-			if (event.type == Event::KeyPressed || event.type == Event::KeyReleased)
-				if (event.key.code == Keyboard::Space) {
-					entities.push_back(new Bullet(bulletImage, "Bullet", lvl, hero.x, hero.y, 16, 16, hero.state));
-					shootSound.play();
-				}
 		}
-		lifeBarPlayer.update(hero.health);
-
-		hero.update(time);
-		for (auto iter = entities.begin(); iter != entities.end();) {
-			Entity * temp = *iter;
-			temp->update(time);
-			if (!temp->life) {
-				iter = entities.erase(iter);
-				delete(temp);
-			}else iter++;
-		}
-
-		for (auto &iter : entities) {
-			if (iter->getRect().intersects(hero.getRect())) {
-				if (iter->name == "MovingPlatform") {
-					if (hero.dy > 0)
-						if (hero.y + hero.height < iter->y +  iter->height) {
-							hero.y = iter->y - hero.height + 3;
-							hero.x += iter->dx * time;
-							hero.dy = 0;
-							hero.onGround = true;
-						}
-				}
-				if (iter->name == "EasyEnemy")
-					if (hero.dy > 0 && !hero.onGround) {
-						iter->dx = 0;
-						hero.dy = (float) -0.2;
-						iter->health = 0;
-					} else hero.health -= 0.00000000000005;
-			}
-			for (auto &iter2 : entities) {
-				if (iter->getRect() != iter2->getRect())
-					if (iter->getRect().intersects(iter2->getRect())) {
-						iter->dx *= -1;
-						iter->sprite.scale(-1, 1);
-					}
-			}
-		}
-
 
 		window.setView(view);
 		window.clear(Color(77,83,140));
-
 		lvl.Draw(window);
-
-		for (auto &entity : entities)
-			window.draw(entity->sprite);
-
-		lifeBarPlayer.draw(window);
-		window.draw(hero.sprite);
 		window.display();
 	}
+
 	return EXIT_SUCCESS;
 }
 #pragma clang diagnostic pop
