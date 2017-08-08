@@ -103,8 +103,8 @@ public:
 
 
 int main() {
-	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft2",Style::Fullscreen);
-	window.setMouseCursorVisible(true);
+	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft 2",Style::Fullscreen);
+	window.setMouseCursorVisible(false);
 	View view;
 	view.setSize(window.getSize().x, window.getSize().y);
 	view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
@@ -130,7 +130,8 @@ int main() {
 		window.setView(view);
 		lvl.Draw(window);
 		player.drawResources(window, font);
-		player.cursor.setCursorPosition(Mouse::getPosition(window).x, Mouse::getPosition(window).y);
+		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition()));
+		player.cursor.draw(window);
 		window.display();
 	}
 

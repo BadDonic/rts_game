@@ -16,7 +16,8 @@ class Cursor {
 	Sprite sprite;
 public:
 	Cursor();
-	void setCursorPosition(double x, double y);
+	void setCursorPosition(Vector2f position);
+	void draw(RenderWindow &window);
 };
 
 

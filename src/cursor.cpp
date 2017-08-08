@@ -9,8 +9,13 @@ Cursor::Cursor() {
 	texture.loadFromImage(defaultImage);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 0, 32, 32));
+	sprite.setOrigin(16, 16);
 }
 
-void Cursor::setCursorPosition(double x, double y) {
-	sprite.setPosition(x, y);
+void Cursor::setCursorPosition(Vector2f position) {
+	sprite.setPosition(position.x - 57, position.y - 44);
+}
+
+void Cursor::draw(RenderWindow &window) {
+	window.draw(sprite);
 }
