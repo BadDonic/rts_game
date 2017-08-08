@@ -104,6 +104,7 @@ public:
 
 int main() {
 	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft2",Style::Fullscreen);
+	window.setMouseCursorVisible(true);
 	View view;
 	view.setSize(window.getSize().x, window.getSize().y);
 	view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
@@ -125,11 +126,11 @@ int main() {
 			if (event.type == Event::Closed) window.close();
 
 		}
-
 		controlView(view, window, time);
 		window.setView(view);
 		lvl.Draw(window);
 		player.drawResources(window, font);
+		player.cursor.setCursorPosition(Mouse::getPosition(window).x, Mouse::getPosition(window).y);
 		window.display();
 	}
 
