@@ -3,6 +3,7 @@
 #include <SFML/Audio.hpp>
 #include <level.h>
 #include <list>
+#include <player.h>
 
 using namespace sf;
 using namespace std;
@@ -107,10 +108,11 @@ int main() {
 	view.setSize(window.getSize().x, window.getSize().y);
 	view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
 	Font font;
-	font.loadFromFile("../fonts/Roboto-Italic.ttf");
+	font.loadFromFile("../font/Roboto-Italic.ttf");
 
-	Level lvl("../images/map.tmx");
+	Level lvl("../image/map.tmx");
 	Clock clock;
+	Player player;
 
 	while (window.isOpen()) {
 		double time = clock.getElapsedTime().asMicroseconds();
@@ -127,6 +129,7 @@ int main() {
 		controlView(view, window, time);
 		window.setView(view);
 		lvl.Draw(window);
+		player.drawResources(window, font);
 		window.display();
 	}
 

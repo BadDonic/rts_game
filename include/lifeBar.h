@@ -12,7 +12,7 @@ public:
 	int max;
 	RectangleShape bar;
 	LifeBar () {
-		image.loadFromFile("../images/life.png");
+		image.loadFromFile("../image/life.png");
 		image.createMaskFromColor(Color(50, 96, 166));
 		texture.loadFromImage(image);
 		sprite.setTexture(texture);
