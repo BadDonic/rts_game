@@ -295,38 +295,3 @@ void Level::Draw(sf::RenderWindow &window)
 Level::Level(sf::String filename) {
 	this->LoadFromFile(filename);
 }
-
-void setPlayerCoordinatesForView(sf::View &view, double &x, double &y) {
-	double tempX = x;
-	double tempY = y;
-	double minX = view.getSize().x / 2;
-	double minY = view.getSize().y / 2;
-	double max = 96 * 32;
-
-	if (x < minX) tempX = minX;
-	if (x > max - minX) tempX = max - minX;
-	if (y < minY) tempY = minY;
-	if (y > max - minY) tempY = max - minY;
-
-	view.setCenter(tempX, tempY);
-}
-
-void controlView(sf::View &view, sf::RenderWindow &window,double &time) {
-	double tempX = view.getCenter().x;
-	double tempY = view.getCenter().y;
-	sf::Vector2i localPosition= sf::Mouse::getPosition(window);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || localPosition.x > window.getSize().x-3) {
-		tempX += 0.5*time;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || localPosition.y > window.getSize().y-3) {
-		tempY += 0.5*time;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || localPosition.x < 3) {
-		tempX += -0.5*time;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || localPosition.y < 3) {
-		tempY += -0.5*time;
-	}
-	setPlayerCoordinatesForView(view, tempX, tempY);
-}

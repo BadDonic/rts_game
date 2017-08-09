@@ -105,33 +105,32 @@ public:
 int main() {
 	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft 2",Style::Fullscreen);
 	window.setMouseCursorVisible(false);
-	View view;
-	view.setSize(window.getSize().x, window.getSize().y);
-	view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
+
 	Font font;
 	font.loadFromFile("../font/Roboto-Italic.ttf");
 
 	Level lvl("../image/map.tmx");
-	Clock clock;
-	Player player;
 
+	Player player(window.getSize());
+
+	Clock clock;
 	while (window.isOpen()) {
 		double time = clock.getElapsedTime().asMicroseconds();
 
 		clock.restart();
 		time /= 500;
 
-		Event event = {};
-		while (window.pollEvent(event)) {
-			if (event.type == Event::Closed) window.close();
+		player.control(window, time);
 
-		}
-		controlView(view, window, time);
-		window.setView(view);
+
+		window.setView(player.view);
 		lvl.Draw(window);
 		player.drawResources(window, font);
+		if (player.cursor.isClicked()) {
+			player.cursor.drawRectangle(window);
+		}
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition()));
-		player.cursor.draw(window);
+		player.cursor.drawCursor(window);
 		window.display();
 	}
 

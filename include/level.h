@@ -48,6 +48,5 @@ public:
 	std::vector<Layer> layers;
 };
 
-void setPlayerCoordinatesForView(sf::View &view, double &x, double &y);//Можно создать свой собственный класс
-void controlView(sf::View &view, sf::RenderWindow &window,double &time);
+
 #endif

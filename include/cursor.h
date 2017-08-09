@@ -11,13 +11,20 @@ using namespace sf;
 using namespace std;
 
 class Cursor {
+	bool click;
+	RectangleShape rectangle;
 	Image defaultImage;
 	Texture texture;
 	Sprite sprite;
 public:
 	Cursor();
 	void setCursorPosition(Vector2f position);
-	void draw(RenderWindow &window);
+	void drawCursor(RenderWindow &window);
+	void setRectanglePosition(Vector2f position);
+	void setRectangleSize(Vector2f size);
+	void drawRectangle(RenderWindow &window);
+	bool isClicked();
+	void setClick(bool click);
 };
 
 
