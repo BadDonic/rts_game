@@ -1,3 +1,6 @@
+#ifndef RESOURCE_H
+#define RESOURCE_H
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -11,7 +14,9 @@ class Resource {
 	Texture texture;
 	Sprite sprite;
 public:
-	Resource(String filePath, int max, int x, int y, int width, int height);
-	void draw(RenderWindow &window, Font &font, int posX, int posY);
-	void setScale(float factorX, float factorY);
+	Resource(const String &filePath, int startNumber, int max,const IntRect &rect, Vector2f scale);
+	void draw(RenderWindow &window, Font &font, int posX);
+	int getNumber();
 };
+
+#endif RES

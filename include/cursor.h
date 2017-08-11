@@ -1,7 +1,3 @@
-//
-// Created by daniel on 08.08.17.
-//
-
 #ifndef COURSEWORK_CURSOR_H
 #define COURSEWORK_CURSOR_H
 

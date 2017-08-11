@@ -1,18 +1,18 @@
 #include "player.h"
 
-void Player::drawResources(RenderWindow &window, Font &font) {
-	mineral.draw(window, font, 15, 0);
-	gas.draw(window, font, 200, 0);
-	unit.draw(window, font, 400, 0);
-}
 
 Player::Player(Vector2u size) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
-	mineral.setScale(0.3, 0.3);
-	gas.setScale(0.2, 0.2);
-	unit.setScale(0.6, 0.6);
+	commandCenter.checkEnable(mineral.getNumber(), gas.getNumber());
 }
+
+void Player::drawResources(RenderWindow &window, Font &font) {
+	mineral.draw(window, font, 15);
+	gas.draw(window, font, 200);
+	unit.draw(window, font, 400);
+}
+
 
 void Player::setPlayerCoordinatesForView(double &x, double &y) {
 	double tempX = x;
@@ -72,4 +72,10 @@ void Player::control(RenderWindow &window,double &time) {
 	setPlayerCoordinatesForView(tempX, tempY);
 	if ((viewCenterX != view.getCenter().x || viewCenterY != view.getCenter().y) && cursor.isClicked())
 		cursor.setRectangleSize(window.mapPixelToCoords(Mouse::getPosition(window)) + Vector2f(view.getCenter().x - viewCenterX, view.getCenter().y - viewCenterY));
+}
+
+void Player::drawBuildingIcons(RenderWindow &window, Font &font) {
+	commandCenter.draw(window, 0);
+	if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
+		commandCenter.drawPrice(window, font);
 }

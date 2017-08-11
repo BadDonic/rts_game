@@ -106,6 +106,12 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/TinyXML/tinyxmlparser.cpp">
 			<Option target="courseWork"/>
 		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/building.h">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/buildingIcon.h">
+			<Option target="courseWork"/>
+		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/cursor.h">
 			<Option target="courseWork"/>
 		</Unit>
@@ -122,6 +128,12 @@
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/main.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/building.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/buildingIcon.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/cursor.cpp">

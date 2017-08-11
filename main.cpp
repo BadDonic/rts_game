@@ -113,6 +113,8 @@ int main() {
 
 	Player player(window.getSize());
 
+
+
 	Clock clock;
 	while (window.isOpen()) {
 		double time = clock.getElapsedTime().asMicroseconds();
@@ -126,6 +128,7 @@ int main() {
 		window.setView(player.view);
 		lvl.Draw(window);
 		player.drawResources(window, font);
+		player.drawBuildingIcons(window, font);
 		if (player.cursor.isClicked()) {
 			player.cursor.drawRectangle(window);
 		}
