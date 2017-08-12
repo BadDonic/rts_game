@@ -2,9 +2,11 @@
 #define COURSEWORK_PLAYER_H
 
 
+#include <list>
 #include "resource.h"
 #include "cursor.h"
 #include "buildingIcon.h"
+#include "building.h"
 
 class Player {
 	void setPlayerCoordinatesForView(double &x, double &y);
@@ -20,7 +22,7 @@ public:
 	Player(Vector2u size);
 	void drawResources(RenderWindow &window, Font &font);
 	void drawBuildingIcons(RenderWindow &window, Font &font);
-	void control(RenderWindow &window, double &time);
+	void control(RenderWindow &window, Image &buildingImage, list<Building *> * buildingList, double &time);
 };
 
 

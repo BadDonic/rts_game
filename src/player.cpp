@@ -29,14 +29,23 @@ void Player::setPlayerCoordinatesForView(double &x, double &y) {
 	view.setCenter(tempX, tempY);
 }
 
-void Player::control(RenderWindow &window,double &time) {
+void Player::control(RenderWindow &window, Image &buildingImage, list<Building *> * buildingList, double &time) {
 	Event event = {};
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) window.close();
 		if (event.type == Event::MouseButtonPressed) {
 			if (event.key.code == Mouse::Left) {
-				cursor.setRectanglePosition(window.mapPixelToCoords(Mouse::getPosition(window)));
-				cursor.setClick(true);
+				if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))) && cursor.getType() == Default) {
+					cursor.setCursorType(CommandCenter);
+				}else if (cursor.getType() != Default) {
+
+				}else {
+					cursor.setRectanglePosition(window.mapPixelToCoords(Mouse::getPosition(window)));
+					cursor.setClick(true);
+				}
+			}
+			if (event.key.code == Mouse::Right) {
+				if (cursor.getType() != Default) cursor.setCursorType(Default);
 			}
 
 		}

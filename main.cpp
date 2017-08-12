@@ -4,6 +4,7 @@
 #include <level.h>
 #include <list>
 #include <player.h>
+#include <building.h>
 
 using namespace sf;
 using namespace std;
@@ -113,6 +114,9 @@ int main() {
 
 	Player player(window.getSize());
 
+	Image buildingsImage;
+	buildingsImage.loadFromFile("../image/TerranBuilding.png");
+	list<Building *> buildings;
 
 
 	Clock clock;
@@ -122,12 +126,16 @@ int main() {
 		clock.restart();
 		time /= 500;
 
-		player.control(window, time);
+		player.control(window, buildingsImage, &buildings, time);
+
 
 
 		window.setView(player.view);
 		lvl.Draw(window);
-		player.drawResources(window, font);
+		for (auto &it : buildings)
+			it->draw(window);
+
+			player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
 		if (player.cursor.isClicked()) {
 			player.cursor.drawRectangle(window);

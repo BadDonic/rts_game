@@ -14,7 +14,7 @@ class Resource {
 	Texture texture;
 	Sprite sprite;
 public:
-	Resource(const String &filePath, int startNumber, int max,const IntRect &rect, Vector2f scale);
+	Resource(const String &filePath,const int &startNumber,const int &max,const IntRect &rect,const Vector2f &scale);
 	void draw(RenderWindow &window, Font &font, int posX);
 	int getNumber();
 };

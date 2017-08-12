@@ -1,6 +1,6 @@
 #include "resource.h"
 
-Resource::Resource(const String &filePath, int startNumber, int max, const IntRect &rect, Vector2f scale) {
+Resource::Resource(const String &filePath,const int &startNumber, const int &max, const IntRect &rect, const Vector2f &scale) {
 	number = startNumber;
 	this->max = max;
 	image.loadFromFile("../image/" + filePath);

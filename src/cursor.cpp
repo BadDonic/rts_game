@@ -3,15 +3,15 @@
 //
 
 #include <iostream>
+#include <building.h>
 #include "cursor.h"
 
 Cursor::Cursor() {
 	click = false;
 	defaultImage.loadFromFile("../image/cursor.png");
-	texture.loadFromImage(defaultImage);
-	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 0, 32, 32));
-	sprite.setOrigin(16, 16);
+	buildingsImage.loadFromFile("../image/TerranBuilding.png");
+	type = Default;
+	this->setCursorType(type);
 	rectangle.setOutlineThickness(1);
 	rectangle.setOutlineColor(Color::Green);
 	rectangle.setFillColor(Color::Transparent);
@@ -22,7 +22,7 @@ void Cursor::setCursorPosition(Vector2f position) {
 }
 
 void Cursor::drawRectangle(RenderWindow &window) {
-	window.draw(rectangle);
+	if (type == Default) window.draw(rectangle);
 }
 
 void Cursor::setRectangleSize(Vector2f size) {
@@ -44,4 +44,30 @@ bool Cursor::isClicked() {
 
 void Cursor::setClick(bool click) {
 	this->click = click;
+}
+
+void Cursor::setCursorType(int type) {
+	this->type = type;
+	switch (this->type) {
+		case Default: {
+			texture.loadFromImage(defaultImage);
+			sprite.setTexture(texture);
+			sprite.setTextureRect(IntRect(0, 0, 32, 32));
+			sprite.setOrigin(16, 16);
+			break;
+		}
+		case CommandCenter: {
+			texture.loadFromImage(buildingsImage);
+			sprite.setTexture(texture);
+			sprite.setTextureRect(IntRect(0, 0, 128, 100));
+			sprite.setOrigin(64, 50);
+			sprite.setScale(1.2, 1.2);
+			sprite.setColor(Color::Green);
+			break;
+		}
+	}
+}
+
+int Cursor::getType() {
+	return type;
 }
