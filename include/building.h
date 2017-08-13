@@ -15,8 +15,9 @@ class Building {
 	int mode;
 	Texture texture;
 	Sprite sprite;
+	void setType(int type);
 public:
-	Building(Image &image, int type);
+	Building(Image &image, int type, Vector2f position);
 	void draw(RenderWindow &window);
 };
 

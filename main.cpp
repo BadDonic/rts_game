@@ -137,9 +137,7 @@ int main() {
 
 			player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
-		if (player.cursor.isClicked()) {
-			player.cursor.drawRectangle(window);
-		}
+
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition()));
 		player.cursor.drawCursor(window);
 		window.display();

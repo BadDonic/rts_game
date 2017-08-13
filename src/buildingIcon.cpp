@@ -4,10 +4,10 @@
 
 #include "buildingIcon.h"
 
-BuildingIcon::BuildingIcon(String filePath, IntRect rect, int mineral, int gas, float buildTime) {
+BuildingIcon::BuildingIcon(String filePath, string name, IntRect rect, int mineral, int gas) {
 	this->mineral = mineral;
 	this->gas = gas;
-	this->buildTime = buildTime;
+	this->name = name;
 	image.loadFromFile("../image/" + filePath);
 	image.createMaskFromColor(Color::Black);
 	texture.loadFromImage(image);
@@ -23,8 +23,8 @@ void BuildingIcon::draw(RenderWindow &window, float posY) {
 	window.draw(sprite);
 }
 
-void BuildingIcon::checkEnable(int numberOfMineral, int numberOfGas) {
-	if (mineral > numberOfMineral || gas > numberOfGas) {
+void BuildingIcon::checkEnable(Resource &mineral, Resource &gas) {
+	if (this->mineral > mineral.getNumber() || this->gas > gas.getNumber()) {
 		sprite.setColor(Color::White);
 		enable = false;
 	}else {
@@ -36,8 +36,8 @@ void BuildingIcon::checkEnable(int numberOfMineral, int numberOfGas) {
 void BuildingIcon::drawPrice(RenderWindow &window, Font &font) {
 	Text text("", font, 14);
 	text.setColor(Color::White);
-	text.setString( "Cost:\n" + to_string(mineral) + " minerals\n" + to_string(gas) + " gas\nTime : " + to_string((int)buildTime) + " sec");
-	text.setPosition(sprite.getGlobalBounds().left - 15, sprite.getGlobalBounds().top + 72);
+	text.setString(name + "\nCost:\n" + to_string(mineral) + " minerals\n" + to_string(gas) + " gas");
+	text.setPosition(sprite.getGlobalBounds().left - 20, sprite.getGlobalBounds().top + 72);
 	window.draw(text);
 }
 
@@ -47,4 +47,18 @@ FloatRect BuildingIcon::getRect() {
 
 bool BuildingIcon::isEnable() {
 	return enable;
+}
+
+int BuildingIcon::getMineralNumber() {
+	return mineral;
+}
+
+int BuildingIcon::getGasNumber() {
+	return gas;
+}
+
+void BuildingIcon::subtractPrice(Resource &mineral, Resource &gas) {
+	mineral.setNumber(mineral.getNumber() - this->mineral);
+	gas.setNumber(gas.getNumber() - this->gas);
+	checkEnable(mineral,gas);
 }

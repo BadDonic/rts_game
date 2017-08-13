@@ -4,7 +4,7 @@
 Player::Player(Vector2u size) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
-	commandCenter.checkEnable(mineral.getNumber(), gas.getNumber());
+	commandCenter.checkEnable(mineral, gas);
 }
 
 void Player::drawResources(RenderWindow &window, Font &font) {
@@ -33,29 +33,43 @@ void Player::control(RenderWindow &window, Image &buildingImage, list<Building *
 	Event event = {};
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) window.close();
+
 		if (event.type == Event::MouseButtonPressed) {
 			if (event.key.code == Mouse::Left) {
-				if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))) && cursor.getType() == Default) {
-					cursor.setCursorType(CommandCenter);
-				}else if (cursor.getType() != Default) {
-
+				if (cursor.getType() == Default) {
+					if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window)))  && commandCenter.isEnable()) {
+						cursor.setCursorType(CommandCenter);
+					}else {
+						cursor.setRectanglePosition(window.mapPixelToCoords(Mouse::getPosition(window)));
+						cursor.setClick(true);
+					}
 				}else {
-					cursor.setRectanglePosition(window.mapPixelToCoords(Mouse::getPosition(window)));
-					cursor.setClick(true);
+					buildingList->push_back(new Building(buildingImage, cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
+					commandCenter.subtractPrice(mineral, gas);
+					cursor.setCursorType(Default);
 				}
 			}
+
 			if (event.key.code == Mouse::Right) {
 				if (cursor.getType() != Default) cursor.setCursorType(Default);
 			}
 
 		}
-		if (event.type == Event::MouseMoved && cursor.isClicked() ) {
-			cursor.setRectangleSize(window.mapPixelToCoords(Mouse::getPosition(window)));
+
+		if (event.type == Event::MouseMoved) {
+			if (cursor.getType() == Default) {
+				if (cursor.isClicked())
+					cursor.setRectangleSize(window.mapPixelToCoords(Mouse::getPosition(window)));
+			}
 		}
 
 		if (event.type == Event::MouseButtonReleased) {
-			cursor.setClick(false);
-			cursor.setRectangleSize(Vector2f(0, 0));
+			if (cursor.getType() == Default) {
+				if (cursor.isClicked()) {
+					cursor.setClick(false);
+					cursor.setRectangleSize(Vector2f(0, 0));
+				}
+			}
 		}
 
 	}

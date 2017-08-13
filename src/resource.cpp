@@ -27,3 +27,7 @@ void Resource::draw(RenderWindow &window, Font &font, int posX) {
 int Resource::getNumber() {
 	return number;
 }
+
+void Resource::setNumber(int number) {
+	this->number = number;
+}

@@ -22,7 +22,7 @@ void Cursor::setCursorPosition(Vector2f position) {
 }
 
 void Cursor::drawRectangle(RenderWindow &window) {
-	if (type == Default) window.draw(rectangle);
+	window.draw(rectangle);
 }
 
 void Cursor::setRectangleSize(Vector2f size) {
@@ -36,6 +36,12 @@ void Cursor::setRectanglePosition(Vector2f position) {
 
 void Cursor::drawCursor(RenderWindow &window) {
 	window.draw(sprite);
+	if (click) {
+		drawRectangle(window);
+	}else if (type != Default) {
+		rectangle.setPosition(sprite.getPosition() - Vector2f(rectangle.getSize().x / 2, rectangle.getSize().y / 2));
+		drawRectangle(window);
+	}
 }
 
 bool Cursor::isClicked() {
@@ -63,6 +69,7 @@ void Cursor::setCursorType(int type) {
 			sprite.setOrigin(64, 50);
 			sprite.setScale(1.2, 1.2);
 			sprite.setColor(Color::Green);
+			rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 			break;
 		}
 	}
