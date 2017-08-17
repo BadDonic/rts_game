@@ -13,11 +13,11 @@ class Cursor {
 	RectangleShape rectangle;
 	int type;
 	Image defaultImage;
-	Image buildingsImage;
+	Image * buildingsImage;
 	Texture texture;
 	Sprite sprite;
 public:
-	Cursor();
+	Cursor(Image * buildingImage);
 	void setCursorPosition(Vector2f position);
 	bool isClicked();
 	void setClick(bool click);

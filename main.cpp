@@ -112,10 +112,12 @@ int main() {
 
 	Level lvl("../image/map.tmx");
 
-	Player player(window.getSize());
 
 	Image buildingsImage;
 	buildingsImage.loadFromFile("../image/TerranBuilding.png");
+
+	Player player(window.getSize(), buildingsImage);
+
 	list<Building *> buildings;
 
 
@@ -138,7 +140,7 @@ int main() {
 			player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
 
-		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition()));
+		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition(window)));
 		player.cursor.drawCursor(window);
 		window.display();
 	}

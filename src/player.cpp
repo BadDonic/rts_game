@@ -1,7 +1,7 @@
 #include "player.h"
 
 
-Player::Player(Vector2u size) {
+Player::Player(Vector2u size, Image &buildingImage) : cursor(&buildingImage) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
 	commandCenter.checkEnable(mineral, gas);
@@ -36,6 +36,10 @@ void Player::control(RenderWindow &window, Image &buildingImage, list<Building *
 
 		if (event.type == Event::MouseButtonPressed) {
 			if (event.key.code == Mouse::Left) {
+				for (auto &it : *buildingList) {
+					if (it->getActive()) it->setActive(false);
+				}
+
 				if (cursor.getType() == Default) {
 					if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window)))  && commandCenter.isEnable()) {
 						cursor.setCursorType(CommandCenter);
@@ -43,6 +47,12 @@ void Player::control(RenderWindow &window, Image &buildingImage, list<Building *
 						cursor.setRectanglePosition(window.mapPixelToCoords(Mouse::getPosition(window)));
 						cursor.setClick(true);
 					}
+
+					for (auto &it : *buildingList) {
+						if (it->getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
+							it->setActive(true);
+					}
+
 				}else {
 					buildingList->push_back(new Building(buildingImage, cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
 					commandCenter.subtractPrice(mineral, gas);
@@ -53,7 +63,6 @@ void Player::control(RenderWindow &window, Image &buildingImage, list<Building *
 			if (event.key.code == Mouse::Right) {
 				if (cursor.getType() != Default) cursor.setCursorType(Default);
 			}
-
 		}
 
 		if (event.type == Event::MouseMoved) {

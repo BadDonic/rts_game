@@ -19,7 +19,7 @@ public:
 	BuildingIcon commandCenter = BuildingIcon("CmdIconsDisabled.png", "CommandCenter", IntRect(288, 136, 33, 34), 100, 0);
 
 
-	Player(Vector2u size);
+	Player(Vector2u size, Image &buildingImage);
 	void drawResources(RenderWindow &window, Font &font);
 	void drawBuildingIcons(RenderWindow &window, Font &font);
 	void control(RenderWindow &window, Image &buildingImage, list<Building *> * buildingList, double &time);
