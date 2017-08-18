@@ -10,6 +10,7 @@
 
 class Player {
 	Image * buildingImage;
+	Image * healthBarImage;
 	void setPlayerCoordinatesForView(double &x, double &y);
 public:
 	View view;
@@ -20,7 +21,7 @@ public:
 	BuildingIcon commandCenter = BuildingIcon("CmdIconsDisabled.png", "CommandCenter", IntRect(288, 136, 33, 34), 100, 0);
 
 
-	Player(Vector2u size, Image &buildingImage);
+	Player(Vector2u size, Image *buildingImage, Image *healthBarImage);
 	void drawResources(RenderWindow &window, Font &font);
 	void drawBuildingIcons(RenderWindow &window, Font &font);
 	void control(RenderWindow &window, list<Building *> * buildingList, double &time);

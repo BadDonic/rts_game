@@ -1,11 +1,12 @@
 #include "player.h"
 
 
-Player::Player(Vector2u size, Image &buildingImage) : cursor(&buildingImage) {
+Player::Player(Vector2u size, Image *buildingImage, Image *healthBarImage) : cursor(buildingImage) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
 	commandCenter.checkEnable(mineral, gas);
-	this->buildingImage = &buildingImage;
+	this->buildingImage = buildingImage;
+	this->healthBarImage = healthBarImage;
 }
 
 void Player::drawResources(RenderWindow &window, Font &font) {
@@ -55,7 +56,7 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, doub
 					}
 
 				}else if (cursor.getCorrectPlace()){
-					buildingList->push_back(new Building(*buildingImage, cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
+					buildingList->push_back(new Building(*buildingImage, new HealthBar(*healthBarImage), cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);
 				}

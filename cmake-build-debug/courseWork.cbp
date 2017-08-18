@@ -115,10 +115,10 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/cursor.h">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/level.h">
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/healthBar.h">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/lifeBar.h">
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/level.h">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/player.h">
@@ -137,6 +137,9 @@
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/cursor.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/healthBar.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/level.cpp">

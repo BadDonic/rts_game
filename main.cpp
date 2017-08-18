@@ -118,7 +118,12 @@ int main() {
 	Image buildingsImage;
 	buildingsImage.loadFromFile("../image/TerranBuilding.png");
 
-	Player player(window.getSize(), buildingsImage);
+	Image healthBarImage;
+	healthBarImage.loadFromFile("../image/healthBar.png");
+	healthBarImage.createMaskFromColor(Color(50, 96, 166));
+
+
+	Player player(window.getSize(), &buildingsImage, &healthBarImage);
 
 	list<Building *> buildings;
 

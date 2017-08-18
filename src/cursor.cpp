@@ -77,6 +77,7 @@ void Cursor::setCursorType(int type) {
 			rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 			break;
 		}
+		default:break;
 	}
 }
 
