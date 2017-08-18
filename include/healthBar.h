@@ -5,14 +5,14 @@ using namespace sf;
 using namespace std;
 
 class HealthBar {
-public:
 	Texture texture;
 	Sprite sprite;
 	int max;
 	RectangleShape bar;
-
+public:
 	HealthBar(Image &image);
 	void update(int health);
-	void draw(RenderWindow &window, FloatRect rect);
+	void setPosition(FloatRect rect);
+	void draw(RenderWindow &window);
 
 };

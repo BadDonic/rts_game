@@ -20,6 +20,7 @@ class Building {
 	Texture texture;
 	Sprite sprite;
 	void setType(int type);
+	Building();
 public:
 	Building(Image &buildingImage, HealthBar * healthBar, int type, Vector2f position);
 	Building(int type, FloatRect &rect);

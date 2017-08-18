@@ -15,14 +15,15 @@ void HealthBar::update(int health) {
 		bar.setSize(Vector2f(10, (max - health) * 70 / max));
 }
 
-void HealthBar::draw(RenderWindow &window,FloatRect rect) {
+void HealthBar::setPosition(FloatRect rect) {
 	Vector2f size(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height);
 	Vector2f position(rect.left + (rect.width + size.x) / 2, rect.top - size.y);
 
-
 	sprite.setPosition(position);
 	bar.setPosition(position.x + 4, position.y + 4);
+}
 
+void HealthBar::draw(RenderWindow &window) {
 	window.draw(sprite);
 	window.draw(bar);
 }
