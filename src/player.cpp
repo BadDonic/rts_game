@@ -54,7 +54,7 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, doub
 							it->setActive(true);
 					}
 
-				}else {
+				}else if (cursor.getCorrectPlace()){
 					buildingList->push_back(new Building(*buildingImage, cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);

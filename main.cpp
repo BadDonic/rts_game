@@ -145,11 +145,11 @@ int main() {
 		for (auto &it : buildings)
 			it->draw(window);
 
-			player.drawResources(window, font);
+		player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
 
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition(window)));
-		player.cursor.drawCursor(window);
+		player.cursor.drawCursor(window, &buildings);
 		window.display();
 	}
 

@@ -34,10 +34,11 @@ void Cursor::setRectanglePosition(Vector2f position) {
 	rectangle.setPosition(position);
 }
 
-void Cursor::drawCursor(RenderWindow &window) {
+void Cursor::drawCursor(RenderWindow &window, list<Building *> *buildingList) {
 	if (click) {
 		drawRectangle(window);
 	}else if (type != Default) {
+		correctPlace = checkCorrectPlace(window, buildingList);
 		rectangle.setPosition(sprite.getPosition() - Vector2f(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2));
 		drawRectangle(window);
 	}
@@ -62,6 +63,8 @@ void Cursor::setCursorType(int type) {
 			sprite.setTextureRect(IntRect(8, 7, 32, 32));
 			sprite.setOrigin(0, 0);
 			rectangle.setSize(Vector2f(0, 0));
+			rectangle.setOutlineColor(Color::Green);
+			sprite.setColor(Color::Green);
 			break;
 		}
 		case CommandCenter: {
@@ -79,4 +82,29 @@ void Cursor::setCursorType(int type) {
 
 int Cursor::getType() {
 	return type;
+}
+
+bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingList) {
+	Vector2f rectPos = rectangle.getPosition();
+	Vector2f rectSize = rectangle.getSize();
+
+	if (rectPos.x < 0 || rectPos.y < 0 || rectPos.y + rectSize.y > 3072 || rectPos.x + rectSize.x > 3072) {
+		rectangle.setOutlineColor(Color::Red);
+		sprite.setColor(Color::Red);
+		return false;
+	}
+
+	for (auto &it : *buildingList)
+		if (rectangle.getGlobalBounds().intersects(it->getRect())) {
+			rectangle.setOutlineColor(Color::Red);
+			sprite.setColor(Color::Red);
+			return false;
+		}
+	rectangle.setOutlineColor(Color::Green);
+	sprite.setColor(Color::Green);
+	return true;
+}
+
+bool Cursor::getCorrectPlace() {
+	return correctPlace;
 }
