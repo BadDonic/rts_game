@@ -1,6 +1,4 @@
 #include <cursor.h>
-#include "building.h"
-
 
 Building::Building() {
 	active = false;
@@ -19,8 +17,8 @@ Building::Building(Image &image, HealthBar * bar, int type, Vector2f position) :
 	setType(type);
 	sprite.setPosition(position);
 	healthBar->setPosition(getRect());
-	rectangle.setPosition(position.x - sprite.getOrigin().x, position.y - sprite.getOrigin().y - 14);
-	rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height + 14));
+	rectangle.setPosition(position.x - sprite.getOrigin().x, position.y - sprite.getOrigin().y - healthBar->getHeight());
+	rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height + healthBar->getHeight()));
 }
 
 Building::Building(int type, FloatRect &rect) : Building() {
@@ -46,6 +44,7 @@ void Building::setType(int type) {
 			sprite.setOrigin(64, 50);
 			break;
 		}
+		default:break;
 	}
 }
 FloatRect Building::getRect() {

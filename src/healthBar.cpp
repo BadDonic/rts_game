@@ -3,7 +3,7 @@
 HealthBar::HealthBar(Image &image) {
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(783, 2, 15, 84));
+	sprite.setTextureRect(IntRect(783, 2, height, width));
 	sprite.setRotation(90);
 	bar.setRotation(90);
 	bar.setFillColor(Color::Black);
@@ -16,8 +16,7 @@ void HealthBar::update(int health) {
 }
 
 void HealthBar::setPosition(FloatRect rect) {
-	Vector2f size(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height);
-	Vector2f position(rect.left + (rect.width + size.x) / 2, rect.top - size.y);
+	Vector2f position(rect.left + (rect.width + width) / 2, rect.top - height);
 
 	sprite.setPosition(position);
 	bar.setPosition(position.x + 4, position.y + 4);
@@ -26,4 +25,12 @@ void HealthBar::setPosition(FloatRect rect) {
 void HealthBar::draw(RenderWindow &window) {
 	window.draw(sprite);
 	window.draw(bar);
+}
+
+int HealthBar::getHeight() {
+	return height;
+}
+
+int HealthBar::getWidth() {
+	return width;
 }
