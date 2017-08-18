@@ -18,7 +18,7 @@ Building::Building(Image &image, int type, Vector2f position) {
 
 void Building::draw(RenderWindow &window) {
 	if (active) window.draw(rectangle);
-	window.draw(sprite);
+	if (type != Gas && type != Mineral) window.draw(sprite);
 }
 
 void Building::setType(int type) {
@@ -32,6 +32,7 @@ void Building::setType(int type) {
 	}
 }
 FloatRect Building::getRect() {
+	if (type == Mineral || type == Gas) return rectangle.getGlobalBounds();
 	return sprite.getGlobalBounds();
 }
 
@@ -41,4 +42,16 @@ void Building::setActive(bool state) {
 
 bool Building::getActive() {
 	return active;
+}
+
+Building::Building(int type, FloatRect &rect) {
+	life = true;
+	health = 100;
+	active = false;
+	this->type = type;
+	rectangle.setOutlineThickness(1);
+	rectangle.setOutlineColor(Color::Green);
+	rectangle.setFillColor(Color::Transparent);
+	rectangle.setSize(Vector2f(rect.width, rect.height));
+	rectangle.setPosition(rect.left, rect.top);
 }

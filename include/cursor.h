@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-enum {CommandCenter, Barrack, SupplyDepot, Default};
+enum {CommandCenter, Barrack, SupplyDepot, Default, Mineral, Gas};
 
 using namespace sf;
 using namespace std;

@@ -5,6 +5,7 @@ Player::Player(Vector2u size, Image &buildingImage) : cursor(&buildingImage) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
 	commandCenter.checkEnable(mineral, gas);
+	this->buildingImage = &buildingImage;
 }
 
 void Player::drawResources(RenderWindow &window, Font &font) {
@@ -29,7 +30,7 @@ void Player::setPlayerCoordinatesForView(double &x, double &y) {
 	view.setCenter(tempX, tempY);
 }
 
-void Player::control(RenderWindow &window, Image &buildingImage, list<Building *> * buildingList, double &time) {
+void Player::control(RenderWindow &window, list<Building *> * buildingList, double &time) {
 	Event event = {};
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) window.close();
@@ -54,7 +55,7 @@ void Player::control(RenderWindow &window, Image &buildingImage, list<Building *
 					}
 
 				}else {
-					buildingList->push_back(new Building(buildingImage, cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
+					buildingList->push_back(new Building(*buildingImage, cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);
 				}

@@ -111,6 +111,9 @@ int main() {
 
 	Level lvl("../image/map.tmx");
 
+	vector<Object> mineralsObj = lvl.GetObjects("Mineral");
+	vector<Object> gasObj = lvl.GetObjects("Gas");
+
 
 	Image buildingsImage;
 	buildingsImage.loadFromFile("../image/TerranBuilding.png");
@@ -118,6 +121,12 @@ int main() {
 	Player player(window.getSize(), buildingsImage);
 
 	list<Building *> buildings;
+
+	for (auto it : mineralsObj)
+		buildings.push_back(new Building(Mineral, it.rect));
+
+	for (auto it : gasObj)
+		buildings.push_back(new Building(Gas, it.rect));
 
 
 	Clock clock;
@@ -127,7 +136,7 @@ int main() {
 		clock.restart();
 		time /= 500;
 
-		player.control(window, buildingsImage, &buildings, time);
+		player.control(window, &buildings, time);
 
 
 

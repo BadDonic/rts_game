@@ -9,6 +9,7 @@
 #include "building.h"
 
 class Player {
+	Image * buildingImage;
 	void setPlayerCoordinatesForView(double &x, double &y);
 public:
 	View view;
@@ -22,7 +23,7 @@ public:
 	Player(Vector2u size, Image &buildingImage);
 	void drawResources(RenderWindow &window, Font &font);
 	void drawBuildingIcons(RenderWindow &window, Font &font);
-	void control(RenderWindow &window, Image &buildingImage, list<Building *> * buildingList, double &time);
+	void control(RenderWindow &window, list<Building *> * buildingList, double &time);
 };
 
 

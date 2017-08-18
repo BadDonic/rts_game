@@ -20,6 +20,7 @@ class Building {
 	void setType(int type);
 public:
 	Building(Image &image, int type, Vector2f position);
+	Building(int type, FloatRect &rect);
 	void draw(RenderWindow &window);
 	FloatRect getRect();
 	void setActive(bool state);
