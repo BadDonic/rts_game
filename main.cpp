@@ -102,7 +102,6 @@ public:
 };
 
 
-
 int main() {
 	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft 2",Style::Fullscreen);
 	window.setMouseCursorVisible(false);
