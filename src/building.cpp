@@ -1,4 +1,5 @@
 #include <cursor.h>
+#include <icon.h>
 
 Building::Building() {
 	active = false;

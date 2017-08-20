@@ -20,4 +20,4 @@ public:
 	void setNumber(int number);
 };
 
-#endif RES
+#endif

@@ -109,7 +109,9 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, doub
 }
 
 void Player::drawBuildingIcons(RenderWindow &window, Font &font) {
-	commandCenter.draw(window, 0);
+	Vector2f center = window.getView().getCenter();
+	Vector2f size = window.getView().getSize() / (float) 2;
+	commandCenter.draw(window, center + Vector2f(size.x, -size.y) + Vector2f(-0.11 * 2 * size.x,0.29 * 2 * size.y));
 	if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
 		commandCenter.drawPrice(window, font);
 }

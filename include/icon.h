@@ -1,5 +1,5 @@
-#ifndef COURSEWORK_BULDINGICON_H
-#define COURSEWORK_BULDINGICON_H
+#ifndef COURSEWORK_ICON_H
+#define COURSEWORK_ICON_H
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -8,7 +8,7 @@
 using namespace sf;
 using namespace std;
 
-class BuildingIcon {
+class Icon {
 	int mineral;
 	int gas;
 	bool enable;
@@ -17,8 +17,9 @@ class BuildingIcon {
 	Texture texture;
 	Sprite sprite;
 public:
-	BuildingIcon(String filePath, string name, IntRect rect, int mineral, int gas);
-	void draw(RenderWindow &window, float posY);
+	Icon(String filePath, string name, IntRect rect, int mineral, int gas);
+	void setPosition(RenderWindow &window);
+	void draw(RenderWindow &window, Vector2f position);
 	void drawPrice(RenderWindow &window, Font &font);
 	void checkEnable(Resource &mineral, Resource &gas);
 	int getMineralNumber();
@@ -29,4 +30,4 @@ public:
 };
 
 
-#endif //COURSEWORK_BULDINGICON_H
+#endif

@@ -144,7 +144,6 @@ int main() {
 		player.control(window, &buildings, time);
 
 
-
 		window.setView(player.view);
 		lvl.Draw(window);
 		for (auto &it : buildings)
