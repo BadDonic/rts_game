@@ -109,13 +109,16 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/building.h">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/buildingIcon.h">
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/buildingFunction.h">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/cursor.h">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/healthBar.h">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/icon.h">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/level.h">
@@ -133,13 +136,16 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/building.cpp">
 			<Option target="courseWork"/>
 		</Unit>
-		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/buildingIcon.cpp">
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/buildingFunction.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/cursor.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/healthBar.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/icon.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/level.cpp">

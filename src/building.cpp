@@ -1,5 +1,4 @@
 #include <cursor.h>
-#include <icon.h>
 
 Building::Building() {
 	active = false;
@@ -61,3 +60,6 @@ bool Building::getActive() {
 	return active;
 }
 
+int Building::getType() {
+	return type;
+}

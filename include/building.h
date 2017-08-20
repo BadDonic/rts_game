@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "healthBar.h"
+#include "icon.h"
 
 
 using namespace sf;
@@ -12,10 +13,9 @@ using namespace std;
 class Building {
 	int health;
 	bool life;
-	HealthBar * healthBar;
 	bool active;
 	int type;
-	int mode;
+	HealthBar * healthBar;
 	RectangleShape rectangle;
 	Texture texture;
 	Sprite sprite;
@@ -28,6 +28,7 @@ public:
 	FloatRect getRect();
 	void setActive(bool state);
 	bool getActive();
+	int getType();
 };
 
 

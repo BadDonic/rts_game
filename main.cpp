@@ -114,6 +114,8 @@ int main() {
 	vector<Object> mineralsObj = lvl.GetObjects("Mineral");
 	vector<Object> gasObj = lvl.GetObjects("Gas");
 
+	BuildingFunction buildingFunction;
+
 
 	Image buildingsImage;
 	buildingsImage.loadFromFile("../image/TerranBuilding.png");
@@ -123,7 +125,7 @@ int main() {
 	healthBarImage.createMaskFromColor(Color(50, 96, 166));
 
 
-	Player player(window.getSize(), &buildingsImage, &healthBarImage);
+	Player player(window.getSize(), &buildingsImage, &healthBarImage, &buildingFunction);
 
 	list<Building *> buildings;
 
@@ -141,17 +143,17 @@ int main() {
 		clock.restart();
 		time /= 500;
 
+		lvl.Draw(window);
 		player.control(window, &buildings, time);
 
 
 		window.setView(player.view);
-		lvl.Draw(window);
 		for (auto &it : buildings)
 			it->draw(window);
 
 		player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
-
+		buildingFunction.draw(window);
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition(window)));
 		player.cursor.drawCursor(window, &buildings);
 		window.display();
