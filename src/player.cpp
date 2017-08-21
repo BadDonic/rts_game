@@ -1,11 +1,10 @@
 #include "player.h"
 
 
-Player::Player(Vector2u size, Image *buildingImage, Image *healthBarImage, BuildingFunction * buildingFunction) : cursor(buildingImage) {
+Player::Player(Vector2u size, Image *buildingImage, Image *healthBarImage) : cursor(buildingImage) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
 	commandCenter.checkEnable(mineral, gas);
-	this->buildingFunction = buildingFunction;
 	this->buildingImage = buildingImage;
 	this->healthBarImage = healthBarImage;
 }
@@ -32,34 +31,36 @@ void Player::setPlayerCoordinatesForView(double &x, double &y) {
 	view.setCenter(tempX, tempY);
 }
 
-void Player::control(RenderWindow &window, list<Building *> * buildingList, double &time) {
+void Player::control(RenderWindow &window, list<Building *> * buildingList, BuildingFunction &functionsList, double &time) {
 	Event event = {};
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) window.close();
 
 		if (event.type == Event::MouseButtonPressed) {
 			if (event.key.code == Mouse::Left) {
-				for (auto &it : *buildingList) {
-					if (it->getActive()) it->setActive(false);
-				}
+				Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
 
 				if (cursor.getType() == Default) {
-					if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window)))  && commandCenter.isEnable()) {
+					if (commandCenter.getRect().contains(mousePos)  && commandCenter.isEnable()) {
 						cursor.setCursorType(CommandCenter);
+					}else if (functionsList.civilian.getRect().contains(mousePos)) {
+							if (functionsList.civilian.isEnable())
+								functionsList.civilian.subtractPrice(mineral, gas);
 					}else {
-						cursor.setRectanglePosition(window.mapPixelToCoords(Mouse::getPosition(window)));
+						cursor.setRectanglePosition(mousePos);
 						cursor.setClick(true);
-					}
-
-					for (auto &it : *buildingList) {
-						if (it->getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window)))) {
-							it->setActive(true);
-							buildingFunction->setType(it->getType());
+						for (auto &it : *buildingList) {
+							if (it->getActive()) it->setActive(false);
 						}
 					}
 
+					for (auto &it : *buildingList) {
+						if (it->getRect().contains(mousePos))
+							it->setActive(true);
+					}
+
 				}else if (cursor.getCorrectPlace()){
-					buildingList->push_back(new Building(*buildingImage, new HealthBar(*healthBarImage), cursor.getType(), window.mapPixelToCoords(Mouse::getPosition(window))));
+					buildingList->push_back(new Building(*buildingImage, new HealthBar(*healthBarImage), cursor.getType(), mousePos));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);
 				}

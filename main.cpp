@@ -103,7 +103,7 @@ public:
 
 
 int main() {
-	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft 2",Style::Fullscreen);
+	RenderWindow window(VideoMode(1366, 768, 32), "StarCraft 2",Style::Default);
 	window.setMouseCursorVisible(false);
 
 	Font font;
@@ -114,9 +114,6 @@ int main() {
 	vector<Object> mineralsObj = lvl.GetObjects("Mineral");
 	vector<Object> gasObj = lvl.GetObjects("Gas");
 
-	BuildingFunction buildingFunction;
-
-
 	Image buildingsImage;
 	buildingsImage.loadFromFile("../image/TerranBuilding.png");
 
@@ -125,7 +122,9 @@ int main() {
 	healthBarImage.createMaskFromColor(Color(50, 96, 166));
 
 
-	Player player(window.getSize(), &buildingsImage, &healthBarImage, &buildingFunction);
+	Player player(window.getSize(), &buildingsImage, &healthBarImage);
+
+	BuildingFunction buildingFunction(player.mineral, player.gas);
 
 	list<Building *> buildings;
 
@@ -144,16 +143,20 @@ int main() {
 		time /= 500;
 
 		lvl.Draw(window);
-		player.control(window, &buildings, time);
+		player.control(window, &buildings, buildingFunction, time);
 
 
 		window.setView(player.view);
-		for (auto &it : buildings)
+		for (auto &it : buildings) {
 			it->draw(window);
+			if (it->getActive()) {
+				buildingFunction.setType(it->getType());
+				buildingFunction.draw(window, font);
+			}
+		}
 
 		player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
-		buildingFunction.draw(window);
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition(window)));
 		player.cursor.drawCursor(window, &buildings);
 		window.display();
