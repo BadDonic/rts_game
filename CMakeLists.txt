@@ -7,5 +7,5 @@ include_directories(include)
 include_directories(TinyXML)
 
 file(GLOB SOURCES "main.cpp" "src/*.cpp" "include/*.h" "TinyXML/*.h" "TinyXML/*.cpp")
-add_executable(courseWork ${SOURCES} src/buildingFunction.cpp include/buildingFunction.h)
+add_executable(courseWork ${SOURCES} src/buildingFunction.cpp include/buildingFunction.h src/unit.cpp include/unit.h)
 target_link_libraries(courseWork "-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio")

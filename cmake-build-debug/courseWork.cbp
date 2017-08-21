@@ -130,6 +130,9 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/resource.h">
 			<Option target="courseWork"/>
 		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/unit.h">
+			<Option target="courseWork"/>
+		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/main.cpp">
 			<Option target="courseWork"/>
 		</Unit>
@@ -155,6 +158,9 @@
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/resource.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/unit.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/CMakeLists.txt">
