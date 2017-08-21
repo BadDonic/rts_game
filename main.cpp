@@ -149,7 +149,7 @@ int main() {
 		window.setView(player.view);
 		for (auto &it : buildings) {
 			it->draw(window);
-			if (it->getActive()) {
+			if (it->getActive() && it->getType() != Mineral && it->getType() != Gas) {
 				buildingFunction.setType(it->getType());
 				buildingFunction.draw(window, font);
 			}

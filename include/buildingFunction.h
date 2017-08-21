@@ -7,6 +7,9 @@
 
 class BuildingFunction {
 public:
+	bool drawCivilian;
+	bool drawMarine;
+	bool enableSelectPos;
 	list<Icon *> functions;
 	Icon civilian = Icon("icons.png", "Civilian", IntRect(180, 0, 33, 34), 50, 20);
 	Icon marine = Icon("icons.png", "Marine", IntRect(0, 32, 33, 34), 50, 20);

@@ -43,7 +43,7 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, Buil
 				if (cursor.getType() == Default) {
 					if (commandCenter.getRect().contains(mousePos)  && commandCenter.isEnable()) {
 						cursor.setCursorType(CommandCenter);
-					}else if (functionsList.civilian.getRect().contains(mousePos)) {
+					}else if (functionsList.civilian.getRect().contains(mousePos) && functionsList.drawCivilian) {
 							if (functionsList.civilian.isEnable())
 								functionsList.civilian.subtractPrice(mineral, gas);
 					}else {
