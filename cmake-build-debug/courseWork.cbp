@@ -112,6 +112,9 @@
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/buildingFunction.h">
 			<Option target="courseWork"/>
 		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/civilian.h">
+			<Option target="courseWork"/>
+		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/include/cursor.h">
 			<Option target="courseWork"/>
 		</Unit>
@@ -140,6 +143,9 @@
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/buildingFunction.cpp">
+			<Option target="courseWork"/>
+		</Unit>
+		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/civilian.cpp">
 			<Option target="courseWork"/>
 		</Unit>
 		<Unit filename="/home/daniel/Programming/C.C++/Projects/courseWork/src/cursor.cpp">

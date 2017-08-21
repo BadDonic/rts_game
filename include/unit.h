@@ -4,6 +4,7 @@
 #include <cursor.h>
 
 class Unit {
+private:
 	bool life;
 	int angle;
 	int health;
@@ -11,6 +12,7 @@ class Unit {
 	RectangleShape rect;
 	Texture texture;
 	Sprite sprite;
+public:
 	Unit(Image & unit, Image &healthBar, const IntRect &rect, int health);
 
 	virtual void update(float time) = 0;
