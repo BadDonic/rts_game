@@ -5,12 +5,18 @@
 
 class Unit {
 	bool life;
+	int angle;
 	int health;
-	int maxHealth;
-	HealthBar * bar;
+	HealthBar bar;
 	RectangleShape rect;
 	Texture texture;
 	Sprite sprite;
+	Unit(Image & unit, Image &healthBar, const IntRect &rect, int health);
+
+	virtual void update(float time) = 0;
+	virtual void draw(RenderWindow &window) = 0;
+
+	virtual FloatRect getRect();
 };
 
 
