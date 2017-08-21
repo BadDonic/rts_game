@@ -60,7 +60,7 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, Buil
 					}
 
 				}else if (cursor.getCorrectPlace()){
-					buildingList->push_back(new Building(*buildingImage, new HealthBar(*healthBarImage), cursor.getType(), mousePos));
+					buildingList->push_back(new Building(*buildingImage, *healthBarImage, cursor.getType(), mousePos));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);
 				}

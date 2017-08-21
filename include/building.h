@@ -15,15 +15,15 @@ class Building {
 	bool life;
 	bool active;
 	int type;
-	HealthBar * healthBar;
+	HealthBar healthBar;
 	RectangleShape rectangle;
 	Texture texture;
 	Sprite sprite;
 	void setType(int type);
-	Building();
+	Building(Image &healthBar);
 public:
-	Building(Image &buildingImage, HealthBar * healthBar, int type, Vector2f position);
-	Building(int type, FloatRect &rect);
+	Building(Image &buildingImage, Image &healthBar, int type, Vector2f position);
+	Building(int type, Image &healthBar,FloatRect &rect);
 	void draw(RenderWindow &window);
 	FloatRect getRect();
 	void setActive(bool state);

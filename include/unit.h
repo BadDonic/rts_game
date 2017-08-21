@@ -7,10 +7,10 @@ class Unit {
 	bool life;
 	int health;
 	int maxHealth;
-	HealthBar & bar;
+	HealthBar * bar;
 	RectangleShape rect;
-	Texture &texture;
-	Sprite &sprite;
+	Texture texture;
+	Sprite sprite;
 };
 
 

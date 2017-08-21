@@ -1,28 +1,26 @@
 #include <cursor.h>
 
-Building::Building() {
+Building::Building(Image &healthBarImage) : healthBar(healthBarImage){
 	active = false;
 	life = true;
 	health = 100;
 	rectangle.setOutlineThickness(1);
 	rectangle.setOutlineColor(Color::Green);
 	rectangle.setFillColor(Color::Transparent);
+	healthBar.update(health);
 }
 
-Building::Building(Image &image, HealthBar * bar, int type, Vector2f position) : Building() {
-	healthBar = bar;
-	healthBar->update(health);
+Building::Building(Image &image, Image &healthBarImage, int type, Vector2f position) : Building(healthBarImage) {
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	setType(type);
 	sprite.setPosition(position);
-	healthBar->setPosition(getRect());
-	rectangle.setPosition(position.x - sprite.getOrigin().x, position.y - sprite.getOrigin().y - healthBar->getHeight());
-	rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height + healthBar->getHeight()));
+	healthBar.setPosition(getRect());
+	rectangle.setPosition(position.x - sprite.getOrigin().x, position.y - sprite.getOrigin().y - healthBar.getHeight());
+	rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height + healthBar.getHeight()));
 }
 
-Building::Building(int type, FloatRect &rect) : Building() {
-	healthBar = nullptr;
+Building::Building(int type, Image &healthBar, FloatRect &rect) : Building(healthBar) {
 	this->type = type;
 	rectangle.setSize(Vector2f(rect.width, rect.height));
 	rectangle.setPosition(rect.left, rect.top);
@@ -32,7 +30,7 @@ void Building::draw(RenderWindow &window) {
 	if (active) window.draw(rectangle);
 	if (type != Gas && type != Mineral)  {
 		window.draw(sprite);
-		healthBar->draw(window);
+		healthBar.draw(window);
 	}
 }
 

@@ -129,10 +129,10 @@ int main() {
 	list<Building *> buildings;
 
 	for (auto it : mineralsObj)
-		buildings.push_back(new Building(Mineral, it.rect));
+		buildings.push_back(new Building(Mineral, healthBarImage, it.rect));
 
 	for (auto it : gasObj)
-		buildings.push_back(new Building(Gas, it.rect));
+		buildings.push_back(new Building(Gas, healthBarImage, it.rect));
 
 
 	Clock clock;
