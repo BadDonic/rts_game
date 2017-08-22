@@ -16,7 +16,7 @@ public:
 	Icon selectPos =Icon("icons.png", "SelectPosition", IntRect(396, 340, 33, 34), 0, 0);
 	BuildingFunction(Resource &mineral, Resource &gas);
 	void setType(int type);
-	void draw(RenderWindow &window, Font &font);
+	void draw(RenderWindow &window, Font &font, Resource &mineral, Resource &gas);
 };
 
 

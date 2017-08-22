@@ -5,6 +5,7 @@
 #include <list>
 #include <player.h>
 #include <building.h>
+#include <unit.h>
 
 using namespace sf;
 using namespace std;
@@ -121,13 +122,16 @@ int main() {
 	healthBarImage.loadFromFile("../image/healthBar.png");
 	healthBarImage.createMaskFromColor(Color(50, 96, 166));
 
+	Image civilianImage;
+	civilianImage.loadFromFile("../image/civilian.png");
 
-	Player player(window.getSize(), &buildingsImage, &healthBarImage);
+
+	Player player(window.getSize(), &buildingsImage, &healthBarImage, &civilianImage);
 
 	BuildingFunction buildingFunction(player.mineral, player.gas);
 
 	list<Building *> buildings;
-
+	list<Unit *> units;
 	for (auto it : mineralsObj)
 		buildings.push_back(new Building(Mineral, healthBarImage, it.rect));
 
@@ -137,13 +141,14 @@ int main() {
 
 	Clock clock;
 	while (window.isOpen()) {
-		double time = clock.getElapsedTime().asMicroseconds();
+		Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
+		float time = clock.getElapsedTime().asMicroseconds();
 
 		clock.restart();
 		time /= 500;
 
 		lvl.Draw(window);
-		player.control(window, &buildings, buildingFunction, time);
+		player.control(window, &buildings, &units, buildingFunction, time);
 
 
 		window.setView(player.view);
@@ -151,8 +156,11 @@ int main() {
 			it->draw(window);
 			if (it->getActive() && it->getType() != Mineral && it->getType() != Gas) {
 				buildingFunction.setType(it->getType());
-				buildingFunction.draw(window, font);
+				buildingFunction.draw(window, font, player.mineral, player.gas);
 			}
+		}
+		for (auto &it : units) {
+			it->draw(window);
 		}
 
 		player.drawResources(window, font);

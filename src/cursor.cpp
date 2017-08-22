@@ -109,3 +109,11 @@ bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingL
 bool Cursor::getCorrectPlace() {
 	return correctPlace;
 }
+
+Vector2f Cursor::getPosition() {
+	return sprite.getPosition();
+}
+
+FloatRect Cursor::getRect() {
+	return rectangle.getGlobalBounds();
+}

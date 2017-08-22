@@ -4,20 +4,21 @@
 #include <cursor.h>
 
 class Unit {
-private:
+protected:
 	bool life;
+	bool active;
 	int angle;
 	int health;
 	HealthBar bar;
-	RectangleShape rect;
+	RectangleShape rectangle;
 	Texture texture;
 	Sprite sprite;
 public:
-	Unit(Image & unit, Image &healthBar, const IntRect &rect, int health);
-
+	Unit(Image & unit, Image &healthBar, const IntRect &rect, const Vector2f &pos, int health);
 	virtual void update(float time) = 0;
 	virtual void draw(RenderWindow &window) = 0;
-
+	void setActive (bool active);
+	bool getActive();
 	virtual FloatRect getRect();
 };
 

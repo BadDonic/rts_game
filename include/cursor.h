@@ -32,6 +32,8 @@ public:
 	void setRectangleSize(Vector2f size);
 	void drawRectangle(RenderWindow &window);
 	bool getCorrectPlace();
+	FloatRect getRect();
+	Vector2f getPosition();
 };
 
 

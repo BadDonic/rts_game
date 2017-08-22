@@ -1,12 +1,14 @@
+#include <civilian.h>
 #include "player.h"
 
 
-Player::Player(Vector2u size, Image *buildingImage, Image *healthBarImage) : cursor(buildingImage) {
+Player::Player(Vector2u size, Image *buildingImage, Image *healthBarImage, Image * civilianImage) : cursor(buildingImage) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
 	commandCenter.checkEnable(mineral, gas);
 	this->buildingImage = buildingImage;
 	this->healthBarImage = healthBarImage;
+	this->civilianImage = civilianImage;
 }
 
 void Player::drawResources(RenderWindow &window, Font &font) {
@@ -31,7 +33,7 @@ void Player::setPlayerCoordinatesForView(double &x, double &y) {
 	view.setCenter(tempX, tempY);
 }
 
-void Player::control(RenderWindow &window, list<Building *> * buildingList, BuildingFunction &functionsList, double &time) {
+void Player::control(RenderWindow &window, list<Building *> * buildings, list<Unit *> * units, BuildingFunction &functionsList, float &time) {
 	Event event = {};
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) window.close();
@@ -44,23 +46,35 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, Buil
 					if (commandCenter.getRect().contains(mousePos)  && commandCenter.isEnable()) {
 						cursor.setCursorType(CommandCenter);
 					}else if (functionsList.civilian.getRect().contains(mousePos) && functionsList.drawCivilian) {
-							if (functionsList.civilian.isEnable())
+							if (functionsList.civilian.isEnable()) {
+								units->push_back(new Civilian(*civilianImage, *healthBarImage, IntRect(0, 0, 47, 36), Vector2f(300, 400), 100));
 								functionsList.civilian.subtractPrice(mineral, gas);
+							}
 					}else {
 						cursor.setRectanglePosition(mousePos);
 						cursor.setClick(true);
-						for (auto &it : *buildingList) {
+
+						for (auto &it : *buildings) {
+							if (it->getActive()) it->setActive(false);
+						}
+
+						for (auto &it : *units) {
 							if (it->getActive()) it->setActive(false);
 						}
 					}
 
-					for (auto &it : *buildingList) {
+					for (auto &it : *units) {
+						if (it->getRect().contains(cursor.getPosition()))
+							it->setActive(true);
+					}
+
+					for (auto &it : *buildings) {
 						if (it->getRect().contains(mousePos))
 							it->setActive(true);
 					}
 
 				}else if (cursor.getCorrectPlace()){
-					buildingList->push_back(new Building(*buildingImage, *healthBarImage, cursor.getType(), mousePos));
+					buildings->push_back(new Building(*buildingImage, *healthBarImage, cursor.getType(), mousePos));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);
 				}
@@ -79,10 +93,16 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, Buil
 		}
 
 		if (event.type == Event::MouseButtonReleased) {
-			if (cursor.getType() == Default) {
-				if (cursor.isClicked()) {
-					cursor.setClick(false);
-					cursor.setRectangleSize(Vector2f(0, 0));
+			if (event.key.code == Mouse::Left) {
+				if (cursor.getType() == Default) {
+					if (cursor.isClicked()) {
+						cursor.setClick(false);
+						for (auto &it : *units) {
+							if (it->getRect().intersects(cursor.getRect()))
+								it->setActive(true);
+						}
+						cursor.setRectangleSize(Vector2f(0, 0));
+					}
 				}
 			}
 		}
@@ -115,7 +135,7 @@ void Player::control(RenderWindow &window, list<Building *> * buildingList, Buil
 void Player::drawBuildingIcons(RenderWindow &window, Font &font) {
 	Vector2f center = window.getView().getCenter();
 	Vector2f size = window.getView().getSize() / (float) 2;
-	commandCenter.draw(window, center + Vector2f(size.x, -size.y) + Vector2f(-0.11 * 2 * size.x,0.29 * 2 * size.y));
+	commandCenter.draw(window, center + Vector2f(size.x, -size.y) + Vector2f(-0.11 * 2 * size.x,0.29 * 2 * size.y), mineral, gas);
 	if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
 		commandCenter.drawPrice(window, font);
 }

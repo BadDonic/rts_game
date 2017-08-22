@@ -12,8 +12,9 @@ Icon::Icon(String filePath, string name, IntRect rect, int mineral, int gas) {
 	sprite.setScale(2, 2);
 }
 
-void Icon::draw(RenderWindow &window,const Vector2f &position) {
+void Icon::draw(RenderWindow &window,const Vector2f &position, Resource &mineral, Resource &gas) {
 	sprite.setPosition(position);
+	checkEnable(mineral, gas);
 	window.draw(sprite);
 }
 

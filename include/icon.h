@@ -18,7 +18,7 @@ class Icon {
 	Sprite sprite;
 public:
 	Icon(String filePath, string name, IntRect rect, int mineral, int gas);
-	void draw(RenderWindow &window, const Vector2f &position);
+	void draw(RenderWindow &window, const Vector2f &position, Resource &mineral, Resource &gas);
 	void drawPrice(RenderWindow &window, Font &font);
 	void checkEnable(Resource &mineral, Resource &gas);
 	int getMineralNumber();
