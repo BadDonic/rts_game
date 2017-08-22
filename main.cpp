@@ -148,13 +148,15 @@ int main() {
 		time /= 500;
 
 		lvl.Draw(window);
+
 		player.control(window, &buildings, &units, buildingFunction, time);
 
-
 		window.setView(player.view);
+
+		buildingFunction.activeFunction = false;
 		for (auto &it : buildings) {
 			it->draw(window);
-			if (it->getActive() && it->getType() != Mineral && it->getType() != Gas) {
+			if (it->getActive()) {
 				buildingFunction.setType(it->getType());
 				buildingFunction.draw(window, font, player.mineral, player.gas);
 			}

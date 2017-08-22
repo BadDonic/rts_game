@@ -15,7 +15,7 @@ Building::Building(Image &image, Image &healthBarImage, int type, Vector2f posit
 	sprite.setTexture(texture);
 	setType(type);
 	sprite.setPosition(position);
-	healthBar.setPosition(getRect());
+	healthBar.setPosition(sprite.getGlobalBounds());
 	rectangle.setPosition(position.x - sprite.getOrigin().x, position.y - sprite.getOrigin().y - healthBar.getHeight());
 	rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height + healthBar.getHeight()));
 }
@@ -46,8 +46,7 @@ void Building::setType(int type) {
 	}
 }
 FloatRect Building::getRect() {
-	if (type == Mineral || type == Gas) return rectangle.getGlobalBounds();
-	return sprite.getGlobalBounds();
+	return rectangle.getGlobalBounds();
 }
 
 void Building::setActive(bool state) {

@@ -12,11 +12,12 @@ Unit::Unit(Image &unitImage, Image &healthBar, const IntRect &rect, const Vector
 	rectangle.setOutlineThickness(1);
 	rectangle.setOutlineColor(Color::Green);
 	rectangle.setFillColor(Color::Transparent);
-	rectangle.setSize(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height + bar.getHeight()));
+	bar.setPosition(sprite.getGlobalBounds());
+	bar.update(health);
 }
 
 FloatRect Unit::getRect() {
-	return sprite.getGlobalBounds();
+	return rectangle.getGlobalBounds();
 }
 
 void Unit::setActive(bool active) {

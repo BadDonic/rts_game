@@ -9,20 +9,14 @@ BuildingFunction::BuildingFunction(Resource &mineral, Resource &gas) {
 
 void BuildingFunction::setType(int type) {
 	functions.clear();
-	drawCivilian = false;
-	drawMarine = false;
-	//enableSelectPos = false
+	this->type = type;
+	activeFunction = true;
 	if (type != SupplyDepot  && type != Mineral && type != Gas) {
 		//>>>functions.push_back(&selectPos);
-		//enableSelectPos = true
-		if (type == CommandCenter)  {
+		if (type == CommandCenter)
 			functions.push_back(&civilian);
-			drawCivilian = true;
-		}
-		else {
+		else
 			functions.push_back(&marine);
-			drawMarine = true;
-		}
 	}
 }
 
