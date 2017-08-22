@@ -12,10 +12,11 @@ class HealthBar {
 	int max;
 	RectangleShape bar;
 public:
-	HealthBar(Image &image);
+	HealthBar(Image &image, int max);
 	void update(int health);
 	void setPosition(FloatRect rect);
 	void draw(RenderWindow &window);
+	void setScale(float factX, float factY);
 	int getHeight();
 	int getWidth();
 

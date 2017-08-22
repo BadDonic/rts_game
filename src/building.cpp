@@ -1,9 +1,9 @@
 #include <cursor.h>
 
-Building::Building(Image &healthBarImage) : healthBar(healthBarImage){
+Building::Building(Image &healthBarImage) : healthBar(healthBarImage , health){
 	active = false;
 	life = true;
-	health = 100;
+	health = 3000;
 	rectangle.setOutlineThickness(1);
 	rectangle.setOutlineColor(Color::Green);
 	rectangle.setFillColor(Color::Transparent);

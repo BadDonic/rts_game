@@ -1,13 +1,13 @@
 #include <healthBar.h>
 
-HealthBar::HealthBar(Image &image) {
+HealthBar::HealthBar(Image &image, int max) {
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(783, 2, height, width));
 	sprite.setRotation(90);
 	bar.setRotation(90);
 	bar.setFillColor(Color::Black);
-	max = 100;
+	this->max = max;
 }
 
 void HealthBar::update(int health) {
@@ -33,4 +33,9 @@ int HealthBar::getHeight() {
 
 int HealthBar::getWidth() {
 	return width;
+}
+
+void HealthBar::setScale(float factX, float factY) {
+	sprite.setScale(factX, factY);
+	bar.setScale(factX, factY);
 }
