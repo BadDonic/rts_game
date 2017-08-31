@@ -1,7 +1,3 @@
-//
-// Created by daniel on 21.08.17.
-//
-
 #ifndef COURSEWORK_CIVILIAN_H
 #define COURSEWORK_CIVILIAN_H
 

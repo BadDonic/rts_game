@@ -168,7 +168,7 @@ int main() {
 		player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition(window)));
-		player.cursor.drawCursor(window, &buildings);
+		player.cursor.drawCursor(window, &buildings, &units);
 		window.display();
 	}
 

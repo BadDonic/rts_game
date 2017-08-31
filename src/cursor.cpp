@@ -1,7 +1,3 @@
-//
-// Created by daniel on 08.08.17.
-//
-
 #include <iostream>
 #include <building.h>
 #include "cursor.h"
@@ -34,11 +30,11 @@ void Cursor::setRectanglePosition(Vector2f position) {
 	rectangle.setPosition(position);
 }
 
-void Cursor::drawCursor(RenderWindow &window, list<Building *> *buildingList) {
+void Cursor::drawCursor(RenderWindow &window, list<Building *> *buildingList, list<Unit *> *unitList) {
 	if (click) {
 		drawRectangle(window);
 	}else if (type != Default) {
-		correctPlace = checkCorrectPlace(window, buildingList);
+		correctPlace = checkCorrectPlace(window, buildingList, unitList);
 		rectangle.setPosition(sprite.getPosition() - Vector2f(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2));
 		drawRectangle(window);
 	}
@@ -85,7 +81,7 @@ int Cursor::getType() {
 	return type;
 }
 
-bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingList) {
+bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingList, list<Unit *> *unitList) {
 	Vector2f rectPos = rectangle.getPosition();
 	Vector2f rectSize = rectangle.getSize();
 
@@ -101,6 +97,14 @@ bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingL
 			sprite.setColor(Color::Red);
 			return false;
 		}
+
+	for (auto &it : *unitList)
+		if (rectangle.getGlobalBounds().intersects(it->getRect())) {
+			rectangle.setOutlineColor(Color::Red);
+			sprite.setColor(Color::Red);
+			return false;
+		}
+
 	rectangle.setOutlineColor(Color::Green);
 	sprite.setColor(Color::Green);
 	return true;
