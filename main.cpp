@@ -4,8 +4,7 @@
 #include <level.h>
 #include <list>
 #include <player.h>
-#include <building.h>
-#include <unit.h>
+
 
 using namespace sf;
 using namespace std;
@@ -149,8 +148,7 @@ int main() {
 
 		lvl.Draw(window);
 
-		player.control(window, &buildings, &units, buildingFunction, time);
-
+		player.control(window, buildings, units, buildingFunction, time);
 		window.setView(player.view);
 
 		buildingFunction.activeFunction = false;
@@ -164,11 +162,10 @@ int main() {
 		for (auto &it : units) {
 			it->draw(window);
 		}
-
 		player.drawResources(window, font);
 		player.drawBuildingIcons(window, font);
 		player.cursor.setCursorPosition(window.mapPixelToCoords(Mouse::getPosition(window)));
-		player.cursor.drawCursor(window, &buildings, &units);
+		player.cursor.drawCursor(window, units, buildings);
 		window.display();
 	}
 

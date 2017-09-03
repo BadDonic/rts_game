@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <building.h>
-#include "unit.h"
+#include <unit.h>
 
 
 enum {CommandCenter, Barrack, SupplyDepot, Default, Mineral, Gas};
@@ -21,7 +21,7 @@ class Cursor {
 	Image * buildingsImage;
 	Texture texture;
 	Sprite sprite;
-	bool checkCorrectPlace(RenderWindow &window, list<Building *> * buildingList, list<Unit *> * unitList);
+	bool checkCorrectPlace(RenderWindow &window, list<Unit *>& unitList, list<Building *>& buildingList);
 public:
 	Cursor(Image * buildingImage);
 	void setCursorPosition(Vector2f position);
@@ -29,7 +29,7 @@ public:
 	void setClick(bool click);
 	void setCursorType(int type);
 	int getType();
-	void drawCursor(RenderWindow &window, list<Building *> *buildingList, list<Unit *> *unitList);
+	void drawCursor(RenderWindow &window, list<Unit *>& unitList, list<Building *>& buildingList);
 	void setRectanglePosition(Vector2f position);
 	void setRectangleSize(Vector2f size);
 	void drawRectangle(RenderWindow &window);

@@ -1,7 +1,11 @@
-#ifndef COURSEWORK_UNITS_H
-#define COURSEWORK_UNITS_H
+#ifndef COURSEWORK_UNIT_H
+#define COURSEWORK_UNIT_H
 
-#include <cursor.h>
+#include <SFML/Graphics.hpp>
+#include <building.h>
+
+using namespace std;
+using namespace sf;
 
 class Unit {
 protected:
@@ -19,8 +23,8 @@ public:
 	virtual void draw(RenderWindow &window) = 0;
 	void setActive (bool active);
 	bool getActive();
-	virtual FloatRect getRect();
+	FloatRect getRect();
 };
 
 
-#endif
+#endif //COURSEWORK_UNIT_H

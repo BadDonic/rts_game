@@ -26,7 +26,7 @@ public:
 	Player(Vector2u size, Image *buildingImage, Image *healthBarImage, Image * civilianImage);
 	void drawResources(RenderWindow &window, Font &font);
 	void drawBuildingIcons(RenderWindow &window, Font &font);
-	void control(RenderWindow &window, list<Building *> * buildings, list<Unit *> * units, BuildingFunction &functionsList, float &time);
+	void control(RenderWindow &window, list<Building *> & buildings, list<Unit *> & units, BuildingFunction &functionsList, float &time);
 };
 
 

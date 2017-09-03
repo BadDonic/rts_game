@@ -1,6 +1,7 @@
 #include <iostream>
 #include <building.h>
 #include "cursor.h"
+#include <list>
 
 Cursor::Cursor(Image * buildingImage) {
 	click = false;
@@ -30,11 +31,11 @@ void Cursor::setRectanglePosition(Vector2f position) {
 	rectangle.setPosition(position);
 }
 
-void Cursor::drawCursor(RenderWindow &window, list<Building *> *buildingList, list<Unit *> *unitList) {
+void Cursor::drawCursor(RenderWindow &window, list<Unit *>& unitList, list<Building *>& buildingList) {
 	if (click) {
 		drawRectangle(window);
 	}else if (type != Default) {
-		correctPlace = checkCorrectPlace(window, buildingList, unitList);
+		correctPlace = checkCorrectPlace(window, unitList, buildingList);
 		rectangle.setPosition(sprite.getPosition() - Vector2f(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2));
 		drawRectangle(window);
 	}
@@ -81,7 +82,7 @@ int Cursor::getType() {
 	return type;
 }
 
-bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingList, list<Unit *> *unitList) {
+bool Cursor::checkCorrectPlace(RenderWindow &window, list<Unit *>& unitList, list<Building *>& buildingList) {
 	Vector2f rectPos = rectangle.getPosition();
 	Vector2f rectSize = rectangle.getSize();
 
@@ -91,14 +92,13 @@ bool Cursor::checkCorrectPlace(RenderWindow &window, list<Building *> *buildingL
 		return false;
 	}
 
-	for (auto &it : *buildingList)
+	for (auto &it : buildingList)
 		if (rectangle.getGlobalBounds().intersects(it->getRect())) {
 			rectangle.setOutlineColor(Color::Red);
 			sprite.setColor(Color::Red);
 			return false;
 		}
-
-	for (auto &it : *unitList)
+	for (auto &it : unitList)
 		if (rectangle.getGlobalBounds().intersects(it->getRect())) {
 			rectangle.setOutlineColor(Color::Red);
 			sprite.setColor(Color::Red);

@@ -33,7 +33,7 @@ void Player::setPlayerCoordinatesForView(double &x, double &y) {
 	view.setCenter(tempX, tempY);
 }
 
-void Player::control(RenderWindow &window, list<Building *> * buildings, list<Unit *> * units, BuildingFunction &functionsList, float &time) {
+void Player::control(RenderWindow &window, list<Building *> & buildings, list<Unit *> & units, BuildingFunction &functionsList, float &time) {
 	Event event = {};
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) window.close();
@@ -47,34 +47,34 @@ void Player::control(RenderWindow &window, list<Building *> * buildings, list<Un
 						cursor.setCursorType(CommandCenter);
 					}else if (functionsList.civilian.getRect().contains(mousePos) && functionsList.type == CommandCenter && functionsList.activeFunction) {
 							if (functionsList.civilian.isEnable()) {
-								units->push_back(new Civilian(*civilianImage, *healthBarImage, IntRect(15, 0, 15, 33), Vector2f(300, 400), 100));
+								units.push_back(new Civilian(*civilianImage, *healthBarImage, IntRect(15, 0, 15, 33), Vector2f(300, 400), 100));
 								functionsList.civilian.subtractPrice(mineral, gas);
 							}
 					}else {
 						cursor.setRectanglePosition(mousePos);
 						cursor.setClick(true);
 
-						for (auto &it : *buildings) {
+						for (auto &it : buildings) {
 							if (it->getActive()) it->setActive(false);
 						}
 
-						for (auto &it : *units) {
+						for (auto &it : units) {
 							if (it->getActive()) it->setActive(false);
 						}
 					}
 
-					for (auto &it : *units) {
+					for (auto &it : units) {
 						if (it->getRect().contains(cursor.getPosition()))
 							it->setActive(true);
 					}
 
-					for (auto &it : *buildings) {
+					for (auto &it : buildings) {
 						if (it->getRect().contains(mousePos))
 							it->setActive(true);
 					}
 
 				}else if (cursor.getCorrectPlace()){
-					buildings->push_back(new Building(*buildingImage, *healthBarImage, cursor.getType(), mousePos));
+					buildings.push_back(new Building(*buildingImage, *healthBarImage, cursor.getType(), mousePos));
 					commandCenter.subtractPrice(mineral, gas);
 					cursor.setCursorType(Default);
 				}
@@ -97,7 +97,7 @@ void Player::control(RenderWindow &window, list<Building *> * buildings, list<Un
 				if (cursor.getType() == Default) {
 					if (cursor.isClicked()) {
 						cursor.setClick(false);
-						for (auto &it : *units) {
+						for (auto &it : units) {
 							if (it->getRect().intersects(cursor.getRect()))
 								it->setActive(true);
 						}
@@ -139,3 +139,4 @@ void Player::drawBuildingIcons(RenderWindow &window, Font &font) {
 	if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
 		commandCenter.drawPrice(window, font);
 }
+
