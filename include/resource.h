@@ -17,6 +17,7 @@ public:
 	Resource(const String &filePath,const int &startNumber,const int &max,const IntRect &rect,const Vector2f &scale);
 	void draw(RenderWindow &window, Font &font, int posX);
 	int getNumber();
+	int getMax();
 	void setNumber(int number);
 };
 

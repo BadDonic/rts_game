@@ -127,7 +127,7 @@ int main() {
 
 	Player player(window.getSize(), &buildingsImage, &healthBarImage, &civilianImage);
 
-	BuildingFunction buildingFunction(player.mineral, player.gas);
+	BuildingFunction buildingFunction(player.mineral, player.gas, player.unit);
 
 	list<Building *> buildings;
 	list<Unit *> units;
@@ -156,7 +156,7 @@ int main() {
 			it->draw(window);
 			if (it->getActive()) {
 				buildingFunction.setType(it->getType());
-				buildingFunction.draw(window, font, player.mineral, player.gas);
+				buildingFunction.draw(window, font, player.mineral, player.gas, player.unit);
 			}
 		}
 		for (auto &it : units) {

@@ -5,7 +5,7 @@
 Player::Player(Vector2u size, Image *buildingImage, Image *healthBarImage, Image * civilianImage) : cursor(buildingImage) {
 	view.setSize(size.x, size.y);
 	view.setCenter(size.x / 2, size.y / 2);
-	commandCenter.checkEnable(mineral, gas);
+	commandCenter.checkEnable(mineral, gas, unit);
 	this->buildingImage = buildingImage;
 	this->healthBarImage = healthBarImage;
 	this->civilianImage = civilianImage;
@@ -48,7 +48,7 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 					}else if (functionsList.civilian.getRect().contains(mousePos) && functionsList.type == CommandCenter && functionsList.activeFunction) {
 							if (functionsList.civilian.isEnable()) {
 								units.push_back(new Civilian(*civilianImage, *healthBarImage, IntRect(15, 0, 15, 33), Vector2f(300, 400), 100));
-								functionsList.civilian.subtractPrice(mineral, gas);
+								functionsList.civilian.subtractPrice(mineral, gas, unit);
 							}
 					}else {
 						cursor.setRectanglePosition(mousePos);
@@ -75,7 +75,7 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 
 				}else if (cursor.getCorrectPlace()){
 					buildings.push_back(new Building(*buildingImage, *healthBarImage, cursor.getType(), mousePos));
-					commandCenter.subtractPrice(mineral, gas);
+					commandCenter.subtractPrice(mineral, gas, unit);
 					cursor.setCursorType(Default);
 				}
 			}
@@ -135,7 +135,7 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 void Player::drawBuildingIcons(RenderWindow &window, Font &font) {
 	Vector2f center = window.getView().getCenter();
 	Vector2f size = window.getView().getSize() / (float) 2;
-	commandCenter.draw(window, center + Vector2f(size.x, -size.y) + Vector2f(-0.11 * 2 * size.x,0.29 * 2 * size.y), mineral, gas);
+	commandCenter.draw(window, center + Vector2f(size.x, -size.y) + Vector2f(-0.11 * 2 * size.x,0.29 * 2 * size.y), mineral, gas, unit);
 	if (commandCenter.getRect().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
 		commandCenter.drawPrice(window, font);
 }

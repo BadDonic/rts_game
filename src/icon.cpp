@@ -1,9 +1,10 @@
 #include "icon.h"
 
-Icon::Icon(String filePath, string name, IntRect rect, int mineral, int gas) {
+Icon::Icon(String filePath, string name, IntRect rect, int mineral, int gas, int unit) {
 	this->mineral = mineral;
 	this->gas = gas;
 	this->name = name;
+	this->unit = unit;
 	image.loadFromFile("../image/" + filePath);
 	image.createMaskFromColor(Color::Black);
 	texture.loadFromImage(image);
@@ -12,14 +13,14 @@ Icon::Icon(String filePath, string name, IntRect rect, int mineral, int gas) {
 	sprite.setScale(2, 2);
 }
 
-void Icon::draw(RenderWindow &window,const Vector2f &position, Resource &mineral, Resource &gas) {
+void Icon::draw(RenderWindow &window,const Vector2f &position, Resource &mineral, Resource &gas, Resource &unit) {
 	sprite.setPosition(position);
-	checkEnable(mineral, gas);
+	checkEnable(mineral, gas, unit);
 	window.draw(sprite);
 }
 
-void Icon::checkEnable(Resource &mineral, Resource &gas) {
-	if (this->mineral > mineral.getNumber() || this->gas > gas.getNumber()) {
+void Icon::checkEnable(Resource &mineral, Resource &gas, Resource &unit) {
+	if (this->mineral > mineral.getNumber() || this->gas > gas.getNumber() || unit.getNumber() + this->unit > unit.getMax()) {
 		sprite.setColor(Color::White);
 		enable = false;
 	}else {
@@ -52,8 +53,8 @@ int Icon::getGasNumber() {
 	return gas;
 }
 
-void Icon::subtractPrice(Resource &mineral, Resource &gas) {
+void Icon::subtractPrice(Resource &mineral, Resource &gas, Resource &unit) {
 	mineral.setNumber(mineral.getNumber() - this->mineral);
 	gas.setNumber(gas.getNumber() - this->gas);
-	checkEnable(mineral,gas);
+	unit.setNumber(unit.getNumber() + this->unit);
 }

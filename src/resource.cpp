@@ -31,3 +31,7 @@ int Resource::getNumber() {
 void Resource::setNumber(int number) {
 	this->number = number;
 }
+
+int Resource::getMax() {
+	return max;
+}
