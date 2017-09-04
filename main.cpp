@@ -160,6 +160,7 @@ int main() {
 			}
 		}
 		for (auto &it : units) {
+			it->update(time);
 			it->draw(window);
 		}
 		player.drawResources(window, font);

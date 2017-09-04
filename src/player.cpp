@@ -58,7 +58,7 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 						}
 
 						for (auto &it : units) {
-							if (it->getActive()) it->setActive(false);
+							if (it->isSelect()) it->setActive(false);
 						}
 					}
 
@@ -83,7 +83,7 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 				if (cursor.getType() != Default) cursor.setCursorType(Default);
 				else if (cursor.getType() == Default) {
 					for (auto &it : units)
-						if (it->getActive()) it->setDirection(mousePos);
+						if (it->isSelect()) it->setDirection(mousePos);
 				}
 			}
 		}
@@ -111,6 +111,12 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 		}
 
 	}
+
+
+
+
+
+
 
 	double tempX = view.getCenter().x;
 	double tempY = view.getCenter().y;

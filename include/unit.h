@@ -10,7 +10,8 @@ using namespace sf;
 class Unit {
 protected:
 	bool life;
-	bool active;
+	bool select;
+	bool isMove;
 	int angle;
 	int health;
 	Vector2f direction;
@@ -20,10 +21,10 @@ protected:
 	Sprite sprite;
 public:
 	Unit(Image & unit, Image &healthBar, const IntRect &rect, const Vector2f &pos, int health);
-	virtual void update(float time,const Vector2f &mousePos) = 0;
+	virtual void update(float time) = 0;
 	virtual void draw(RenderWindow &window) = 0;
-	void setActive (bool active);
-	bool getActive();
+	void setActive(bool active);
+	bool isSelect();
 	virtual void setDirection(const Vector2f &pos) = 0;
 	FloatRect getRect();
 };

@@ -7,7 +7,8 @@ Unit::Unit(Image &unitImage, Image &healthBar, const IntRect &rect, const Vector
 	sprite.setTextureRect(rect);
 	this->health = healthMax;
 	life = true;
-	active = false;
+	select = false;
+	isMove = false;
 	angle = 90;
 	rectangle.setOutlineThickness(1);
 	rectangle.setOutlineColor(Color::Green);
@@ -20,10 +21,10 @@ FloatRect Unit::getRect() {
 }
 
 void Unit::setActive(bool active) {
-	this->active = active;
+	this->select = active;
 }
 
-bool Unit::getActive() {
-	return active;
+bool Unit::isSelect() {
+	return select;
 }
 
