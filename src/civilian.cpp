@@ -1,3 +1,4 @@
+#include <cmath>
 #include "civilian.h"
 
 Civilian::Civilian(Image &unitImage, Image &healthBarImage, const IntRect &rect, const Vector2f &pos, int health) : Unit(unitImage, healthBarImage, rect, pos, health) {
@@ -18,4 +19,15 @@ void Civilian::draw(RenderWindow &window) {
 	window.draw(sprite);
 	bar.draw(window);
 	if (active) window.draw(rectangle);
+}
+
+void Civilian::setDirection(const Vector2f &pos) {
+	direction = pos;
+	Vector2f spritePos = sprite.getPosition();
+	angle = (int)(atan2(pos.y - spritePos.y, pos.x - spritePos.x) * 180 / M_PI);
+	setRotation(angle);
+}
+
+void Civilian::setRotation(int &angle) {
+	if ()
 }

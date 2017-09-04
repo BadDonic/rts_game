@@ -1,3 +1,4 @@
+#include <cmath>
 #include "unit.h"
 
 Unit::Unit(Image &unitImage, Image &healthBar, const IntRect &rect, const Vector2f &pos, int healthMax) : bar(healthBar, healthMax) {

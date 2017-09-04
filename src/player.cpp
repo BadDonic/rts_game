@@ -39,9 +39,8 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 		if (event.type == Event::Closed) window.close();
 
 		if (event.type == Event::MouseButtonPressed) {
+			Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
 			if (event.key.code == Mouse::Left) {
-				Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-
 				if (cursor.getType() == Default) {
 					if (commandCenter.getRect().contains(mousePos)  && commandCenter.isEnable()) {
 						cursor.setCursorType(CommandCenter);
@@ -82,6 +81,10 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 
 			if (event.key.code == Mouse::Right) {
 				if (cursor.getType() != Default) cursor.setCursorType(Default);
+				else if (cursor.getType() == Default) {
+					for (auto &it : units)
+						if (it->getActive()) it->setDirection(mousePos);
+				}
 			}
 		}
 

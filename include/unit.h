@@ -13,6 +13,7 @@ protected:
 	bool active;
 	int angle;
 	int health;
+	Vector2f direction;
 	HealthBar bar;
 	RectangleShape rectangle;
 	Texture texture;
@@ -23,6 +24,7 @@ public:
 	virtual void draw(RenderWindow &window) = 0;
 	void setActive (bool active);
 	bool getActive();
+	virtual void setDirection(const Vector2f &pos) = 0;
 	FloatRect getRect();
 };
 
