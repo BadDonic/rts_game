@@ -46,7 +46,7 @@ void Player::control(RenderWindow &window, list<Building *> & buildings, list<Un
 						cursor.setCursorType(CommandCenter);
 					}else if (functionsList.civilian.getRect().contains(mousePos) && functionsList.type == CommandCenter && functionsList.activeFunction) {
 							if (functionsList.civilian.isEnable()) {
-								units.push_back(new Civilian(*civilianImage, *healthBarImage, IntRect(15, 0, 15, 33), Vector2f(300, 400), 100));
+								units.push_back(new Civilian(*civilianImage, *healthBarImage, IntRect(13, 0, 20, 35), Vector2f(300, 400), 100));
 								functionsList.civilian.subtractPrice(mineral, gas, unit);
 							}
 					}else {
