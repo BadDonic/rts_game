@@ -14,6 +14,7 @@ protected:
 	bool isMove;
 	int angle;
 	int health;
+	float currentFrame;
 	Vector2f direction;
 	HealthBar bar;
 	RectangleShape rectangle;
@@ -25,7 +26,7 @@ public:
 	virtual void draw(RenderWindow &window) = 0;
 	void setActive(bool active);
 	bool isSelect();
-	virtual void setDirection(const Vector2f &pos) = 0;
+	void setDirection(const Vector2f &pos);
 	FloatRect getRect();
 };
 

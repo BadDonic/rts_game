@@ -9,7 +9,8 @@ Unit::Unit(Image &unitImage, Image &healthBar, const IntRect &rect, const Vector
 	life = true;
 	select = false;
 	isMove = false;
-	angle = 90;
+	angle = 0;
+	currentFrame = 0;
 	rectangle.setOutlineThickness(1);
 	rectangle.setOutlineColor(Color::Green);
 	rectangle.setFillColor(Color::Transparent);
@@ -26,5 +27,10 @@ void Unit::setActive(bool active) {
 
 bool Unit::isSelect() {
 	return select;
+}
+
+void Unit::setDirection(const Vector2f &pos) {
+	isMove = true;
+	direction = pos;
 }
 

@@ -17,7 +17,7 @@ void Civilian::update(float time) {
 		double distance = sqrt(pow(x - direction.x, 2) + pow(y - direction.y, 2));
 		angle = (int)(atan2(direction.y - y, direction.x - x) * 180 / M_PI);
 		setRotation(angle);
-
+		setCurrentFrame(time);
 		if (distance > 2) {
 			x += 0.1 * time * (direction.x - x) / distance;
 			y += 0.1 * time * (direction.y - y) / distance;
@@ -34,11 +34,6 @@ void Civilian::draw(RenderWindow &window) {
 	window.draw(sprite);
 	bar.draw(window);
 	if (select) window.draw(rectangle);
-}
-
-void Civilian::setDirection(const Vector2f &pos) {
-	isMove = true;
-	direction = pos;
 }
 
 void Civilian::setRotation(int &angle) {
@@ -60,5 +55,13 @@ void Civilian::setRotation(int &angle) {
 	}else if (angle < -22.5 &&  angle > -67.5) {
 		rect.left = 60;
 	}
+	sprite.setTextureRect(rect);
+}
+
+void Civilian::setCurrentFrame(float &time) {
+	currentFrame += 0.005 * time;
+	if (currentFrame > 7) currentFrame = 0;
+	IntRect rect = sprite.getTextureRect();
+	rect.top = 35 * (int)currentFrame;
 	sprite.setTextureRect(rect);
 }
