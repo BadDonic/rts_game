@@ -1,2 +1,2 @@
-# Course Work (4 term)
+# rts_game
 Real-Time Strategy Game (C++)
